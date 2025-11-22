@@ -24,7 +24,7 @@ class DashboardController extends Controller
         }
 
         $stats = [
-            'total_pupils' => User::where('role', 'pupil')->where('is_active', true)->count(),
+            'total_attendees' => User::where('role', 'attendee')->where('is_active', true)->count(),
             'total_teachers' => User::where('role', 'teacher')->where('is_active', true)->count(),
             'upcoming_lessons' => Lesson::where('status', 'active')
                 ->where('start_datetime', '>=', now())

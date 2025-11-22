@@ -247,7 +247,7 @@ class LessonController extends Controller
             abort(403);
         }
 
-        $query = User::where('role', 'pupil')
+        $query = User::where('role', 'attendee')
             ->whereHas('bookings.lesson', function ($q) use ($user) {
                 if ($user->isTeacher()) {
                     $q->where('teacher_id', $user->id);

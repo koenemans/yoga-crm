@@ -82,7 +82,8 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => 'required|in:admin,teacher,pupil,accountant',
+            'role' => 'required|in:teacher,attendee',
+            'is_admin' => 'boolean',
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
             'address' => 'nullable|string',
@@ -143,7 +144,8 @@ class UserController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,teacher,pupil,accountant',
+            'role' => 'required|in:teacher,attendee',
+            'is_admin' => 'boolean',
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
             'address' => 'nullable|string',
@@ -169,8 +171,8 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        if (!$user->isPupil()) {
-            return back()->with('error', 'Can only adjust credits for pupils.');
+        if (!$user->isAttendee()) {
+            return back()->with('error', 'Can only adjust credits for attendees.');
         }
 
         $validated = $request->validate([

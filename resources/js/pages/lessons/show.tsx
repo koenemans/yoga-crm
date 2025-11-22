@@ -86,7 +86,7 @@ export default function LessonShow({ lesson, user_credit_balance, user_booked, u
         }
     };
 
-    const canBook = (user.role === 'pupil' || user.role === 'admin') && !user_booked;
+    const canBook = (user.role === 'attendee' || user.is_admin) && !user_booked;
     const hasEnoughCredits = user_credit_balance >= lesson.credits_required;
 
     return (
@@ -337,7 +337,7 @@ export default function LessonShow({ lesson, user_credit_balance, user_booked, u
                         </Card>
 
                         {/* Booking Card */}
-                        {(user.role === 'pupil' || user.role === 'admin') && (
+                        {(user.role === 'attendee' || user.is_admin) && (
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Book This Class</CardTitle>

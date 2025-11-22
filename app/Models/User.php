@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_admin',
         'first_name',
         'last_name',
         'phone',
@@ -64,6 +65,7 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
             'date_of_birth' => 'date',
             'is_active' => 'boolean',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -76,11 +78,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an admin.
+     * Check if user is an admin (teacher with admin privileges).
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->is_admin === true;
     }
 
     /**
@@ -92,19 +94,28 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a pupil.
+     * Check if user is an attendee (formerly pupil).
      */
-    public function isPupil(): bool
+    public function isAttendee(): bool
     {
-        return $this->role === 'pupil';
+        return $this->role === 'attendee';
     }
 
     /**
-     * Check if user is an accountant.
+     * Check if user is a pupil (alias for isAttendee for backward compatibility).
+     */
+    public function isPupil(): bool
+    {
+        return $this->isAttendee();
+    }
+
+    /**
+     * Check if user is an accountant (now handled by admin flag).
+     * @deprecated Use isAdmin() instead
      */
     public function isAccountant(): bool
     {
-        return $this->role === 'accountant';
+        return $this->isAdmin();
     }
 
     /**

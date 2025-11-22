@@ -6,17 +6,17 @@ import lessons from '@/routes/lessons';
 import { Link } from '@inertiajs/react';
 import { Calendar, CreditCard, History, User } from 'lucide-react';
 
-interface PupilDashboardProps {
+interface AttendeeDashboardProps {
     creditBalance?: number;
     upcomingBookings?: any[];
     expiringCredits?: any[];
 }
 
-export default function PupilDashboard({ 
+export default function AttendeeDashboard({ 
     creditBalance = 0, 
     upcomingBookings = [],
     expiringCredits = []
-}: PupilDashboardProps) {
+}: AttendeeDashboardProps) {
     return (
         <div className="space-y-6">
             {/* Quick Stats */}

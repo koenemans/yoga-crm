@@ -45,10 +45,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const roleColors = {
-    admin: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100',
     teacher: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
-    pupil: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
-    accountant: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100',
+    attendee: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
 };
 
 export default function UsersIndex({ users, filters }: Props) {
@@ -108,10 +106,8 @@ export default function UsersIndex({ users, filters }: Props) {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">All Roles</SelectItem>
-                                    <SelectItem value="admin">Admin</SelectItem>
                                     <SelectItem value="teacher">Teacher</SelectItem>
-                                    <SelectItem value="pupil">Pupil</SelectItem>
-                                    <SelectItem value="accountant">Accountant</SelectItem>
+                                    <SelectItem value="attendee">Attendee</SelectItem>
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleFilter}>Filter</Button>

@@ -14,7 +14,7 @@ class CreditPurchasePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin() || $user->isAccountant();
+        return $user->isAdmin();
     }
 
     /**
@@ -23,7 +23,6 @@ class CreditPurchasePolicy
     public function view(User $user, CreditPurchase $purchase): bool
     {
         return $user->isAdmin() 
-            || $user->isAccountant()
             || $user->id === $purchase->user_id;
     }
 
@@ -64,6 +63,6 @@ class CreditPurchasePolicy
      */
     public function export(User $user): bool
     {
-        return $user->isAdmin() || $user->isAccountant();
+        return $user->isAdmin();
     }
 }

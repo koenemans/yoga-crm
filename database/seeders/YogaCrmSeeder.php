@@ -16,14 +16,15 @@ class YogaCrmSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
+        // Create admin user (teacher with admin privileges)
         User::create([
             'name' => 'Admin User',
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@yoga.test',
             'password' => Hash::make('password'),
-            'role' => 'admin',
+            'role' => 'teacher',
+            'is_admin' => true,
             'preferred_language' => 'nl',
             'is_active' => true,
         ]);
@@ -40,31 +41,20 @@ class YogaCrmSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Create pupil
+        // Create attendee (formerly pupil)
         User::create([
-            'name' => 'John Pupil',
+            'name' => 'John Attendee',
             'first_name' => 'John',
-            'last_name' => 'Pupil',
-            'email' => 'pupil@yoga.test',
+            'last_name' => 'Attendee',
+            'email' => 'attendee@yoga.test',
             'password' => Hash::make('password'),
-            'role' => 'pupil',
+            'role' => 'attendee',
             'preferred_language' => 'nl',
             'is_active' => true,
             'phone' => '+31612345678',
             'date_of_birth' => '1990-01-01',
         ]);
 
-        // Create accountant
-        User::create([
-            'name' => 'Sarah Accountant',
-            'first_name' => 'Sarah',
-            'last_name' => 'Accountant',
-            'email' => 'accountant@yoga.test',
-            'password' => Hash::make('password'),
-            'role' => 'accountant',
-            'preferred_language' => 'nl',
-            'is_active' => true,
-        ]);
 
         // Create credit packages
         CreditPackage::create([
@@ -108,9 +98,8 @@ class YogaCrmSeeder extends Seeder
         ]);
 
         $this->command->info('Yoga CRM seeded successfully!');
-        $this->command->info('Admin: admin@yoga.test / password');
+        $this->command->info('Admin (Teacher): admin@yoga.test / password');
         $this->command->info('Teacher: teacher@yoga.test / password');
-        $this->command->info('Pupil: pupil@yoga.test / password');
-        $this->command->info('Accountant: accountant@yoga.test / password');
+        $this->command->info('Attendee: attendee@yoga.test / password');
     }
 }

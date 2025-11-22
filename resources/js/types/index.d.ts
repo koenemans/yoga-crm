@@ -37,7 +37,8 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
-    role: 'admin' | 'teacher' | 'pupil' | 'accountant';
+    role: 'teacher' | 'attendee';
+    is_admin: boolean;
     first_name?: string;
     last_name?: string;
     phone?: string;

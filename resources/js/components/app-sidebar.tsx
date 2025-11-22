@@ -20,7 +20,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { Calendar, CreditCard, History, LayoutGrid, PlusCircle, Settings, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const getNavItemsForRole = (role: string): NavItem[] => {
+const getNavItemsForRole = (role: string, isAdmin: boolean): NavItem[] => {
     const baseItems: NavItem[] = [
         {
             title: 'Dashboard',
@@ -29,7 +29,7 @@ const getNavItemsForRole = (role: string): NavItem[] => {
         },
     ];
 
-    if (role === 'pupil') {
+    if (role === 'attendee') {
         return [
             ...baseItems,
             {
@@ -81,7 +81,8 @@ const getNavItemsForRole = (role: string): NavItem[] => {
         ];
     }
 
-    if (role === 'admin') {
+    // Admin teachers get admin navigation
+    if (role === 'teacher' && isAdmin) {
         return [
             ...baseItems,
             {
@@ -107,37 +108,13 @@ const getNavItemsForRole = (role: string): NavItem[] => {
         ];
     }
 
-    if (role === 'accountant') {
-        return [
-            ...baseItems,
-            {
-                title: 'Purchases',
-                href: admin.purchases.index(),
-                icon: CreditCard,
-            },
-            {
-                title: 'Users',
-                href: admin.users.index(),
-                icon: Users,
-            },
-        ];
-    }
-
     return baseItems;
 };
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Settings',
-        href: '/settings/profile',
-        icon: Settings,
-    },
-];
 
 export function AppSidebar() {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const user = auth.user;
-    const mainNavItems = getNavItemsForRole(user.role);
+    const mainNavItems = getNavItemsForRole(user.role, user.is_admin);
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -158,7 +135,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

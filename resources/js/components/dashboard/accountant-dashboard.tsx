@@ -94,7 +94,7 @@ export default function AccountantDashboard({
                         </Link>
                     </Button>
                     <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-                        <Link href="/admin/users?role=pupil">
+                        <Link href="/admin/users?role=attendee">
                             <Users className="h-6 w-6" />
                             <span>Student List</span>
                         </Link>

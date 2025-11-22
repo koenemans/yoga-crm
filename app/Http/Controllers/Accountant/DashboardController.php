@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $pendingAmount = CreditPurchase::where('status', 'pending')->sum('price');
 
         // Active students with credits
-        $activeStudents = User::where('role', 'pupil')
+        $activeStudents = User::where('role', 'attendee')
             ->where('is_active', true)
             ->whereHas('creditTransactions', fn($q) => $q->where('credits', '>', 0))
             ->count();

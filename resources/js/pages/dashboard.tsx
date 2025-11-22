@@ -1,5 +1,5 @@
 import AccountantDashboard from '@/components/dashboard/accountant-dashboard';
-import PupilDashboard from '@/components/dashboard/pupil-dashboard';
+import AttendeeDashboard from '@/components/dashboard/attendee-dashboard';
 import TeacherDashboard from '@/components/dashboard/teacher-dashboard';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -14,7 +14,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface Props {
-    role: 'pupil' | 'teacher' | 'accountant';
+    role: 'attendee' | 'teacher';
     creditBalance?: number;
     upcomingBookings?: any[];
     expiringCredits?: any[];
@@ -33,9 +33,9 @@ export default function Dashboard(props: Props) {
 
     const renderDashboard = () => {
         switch (props.role) {
-            case 'pupil':
+            case 'attendee':
                 return (
-                    <PupilDashboard
+                    <AttendeeDashboard
                         creditBalance={props.creditBalance}
                         upcomingBookings={props.upcomingBookings}
                         expiringCredits={props.expiringCredits}
@@ -47,15 +47,6 @@ export default function Dashboard(props: Props) {
                         upcomingLessons={props.upcomingLessons}
                         totalStudents={props.totalStudents}
                         todayClasses={props.todayClasses}
-                    />
-                );
-            case 'accountant':
-                return (
-                    <AccountantDashboard
-                        totalRevenue={props.totalRevenue}
-                        pendingPurchases={props.pendingPurchases}
-                        activeStudents={props.activeStudents}
-                        recentTransactions={props.recentTransactions}
                     />
                 );
             default:
@@ -72,9 +63,8 @@ export default function Dashboard(props: Props) {
                         Welcome back, {user.first_name || user.name}!
                     </h1>
                     <p className="text-muted-foreground">
-                        {props.role === 'pupil' && 'Book classes and manage your credits'}
+                        {props.role === 'attendee' && 'Book classes and manage your credits'}
                         {props.role === 'teacher' && 'Manage your lessons and students'}
-                        {props.role === 'accountant' && 'View financial reports and transactions'}
                     </p>
                 </div>
                 {renderDashboard()}

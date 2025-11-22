@@ -30,19 +30,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = auth()->user();
         
         // Redirect admin to admin dashboard
-        if ($user->role === 'admin') {
+        if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard');
-        }
-        
-        // Redirect accountant to accountant dashboard
-        if ($user->role === 'accountant') {
-            return redirect()->route('accountant.dashboard');
         }
         
         $data = ['role' => $user->role];
         
-        // Pupil-specific data
-        if ($user->role === 'pupil') {
+        // Attendee-specific data
+        if ($user->isAttendee()) {
             $creditService = app(\App\Services\CreditService::class);
             $data['creditBalance'] = $creditService->getBalance($user);
             $data['upcomingBookings'] = $user->bookings()
@@ -56,7 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         }
         
         // Teacher-specific data
-        if ($user->role === 'teacher') {
+        if ($user->isTeacher()) {
             $data['upcomingLessons'] = $user->taughtLessons()
                 ->with('bookings')
                 ->where('status', 'active')
@@ -80,28 +75,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             )->distinct('user_id')->count('user_id');
         }
         
-        // Accountant-specific data
-        if ($user->role === 'accountant') {
-            $data['totalRevenue'] = \App\Models\CreditPurchase::where('status', 'paid')
-                ->whereMonth('paid_at', now()->month)
-                ->sum('price');
-            $data['pendingPurchases'] = \App\Models\CreditPurchase::where('status', 'pending')->count();
-            $data['activeStudents'] = \App\Models\User::where('role', 'pupil')
-                ->where('is_active', true)
-                ->whereHas('creditTransactions', fn($q) => $q->where('credits', '>', 0))
-                ->count();
-            $data['recentTransactions'] = \App\Models\CreditTransaction::with('user')
-                ->orderBy('created_at', 'desc')
-                ->limit(10)
-                ->get()
-                ->map(fn($t) => [
-                    'id' => $t->id,
-                    'user' => ['name' => $t->user->full_name],
-                    'credits' => $t->credits,
-                    'description' => $t->description,
-                    'created_at' => $t->created_at->format('M j, Y H:i'),
-                ]);
-        }
         
         return Inertia::render('dashboard', $data);
     })->name('dashboard');
@@ -136,8 +109,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('credits/purchase', [CreditController::class, 'purchase'])->name('credits.purchase');
     Route::get('credits/purchase/{purchase}', [CreditController::class, 'showPurchase'])->name('credits.purchase.show');
 
-    // Admin routes
-    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Admin routes (teachers with admin flag)
+    Route::middleware(['role:teacher'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // User management
@@ -152,8 +125,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('purchases/{purchase}/confirm', [CreditPurchaseController::class, 'confirmPayment'])->name('purchases.confirm');
     });
 
-    // Accountant routes
-    Route::middleware(['role:accountant,admin'])->prefix('accountant')->name('accountant.')->group(function () {
+    // Accountant routes (now handled by admin teachers)
+    Route::middleware(['role:teacher'])->prefix('accountant')->name('accountant.')->group(function () {
         Route::get('dashboard', [AccountantDashboardController::class, 'index'])->name('dashboard');
         
         // Purchase management (read-only)

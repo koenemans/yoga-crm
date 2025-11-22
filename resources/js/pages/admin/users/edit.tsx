@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
@@ -17,6 +18,7 @@ interface UserData {
     last_name: string;
     email: string;
     role: string;
+    is_admin: boolean;
     phone: string;
     date_of_birth: string;
     address: string;
@@ -44,6 +46,7 @@ export default function EditUser({ user }: Props) {
         last_name: user.last_name || '',
         email: user.email,
         role: user.role,
+        is_admin: user.is_admin || false,
         phone: user.phone || '',
         date_of_birth: user.date_of_birth || '',
         address: user.address || '',
@@ -190,10 +193,8 @@ export default function EditUser({ user }: Props) {
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="admin">Admin</SelectItem>
                                                 <SelectItem value="teacher">Teacher</SelectItem>
-                                                <SelectItem value="pupil">Pupil</SelectItem>
-                                                <SelectItem value="accountant">Accountant</SelectItem>
+                                                <SelectItem value="attendee">Attendee</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         {errors.role && <p className="text-sm text-destructive">{errors.role}</p>}
@@ -212,13 +213,24 @@ export default function EditUser({ user }: Props) {
                                     </div>
                                 </div>
 
+                                {data.role === 'teacher' && (
+                                    <div className="flex items-center space-x-2">
+                                        <Checkbox
+                                            id="is_admin"
+                                            checked={data.is_admin}
+                                            onCheckedChange={(checked) => setData('is_admin', checked as boolean)}
+                                        />
+                                        <Label htmlFor="is_admin" className="cursor-pointer">
+                                            Grant admin privileges (can manage users, packages, and view financial reports)
+                                        </Label>
+                                    </div>
+                                )}
+
                                 <div className="flex items-center space-x-2">
-                                    <input
-                                        type="checkbox"
+                                    <Checkbox
                                         id="is_active"
                                         checked={data.is_active}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('is_active', e.target.checked)}
-                                        className="h-4 w-4 rounded border-gray-300"
+                                        onCheckedChange={(checked) => setData('is_active', checked as boolean)}
                                     />
                                     <Label htmlFor="is_active" className="cursor-pointer">
                                         Account is active

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import accountant from '@/routes/accountant';
+import admin from '@/routes/admin';
 import { type BreadcrumbItem, type PaginatedData } from '@/types';
 import { Head } from '@inertiajs/react';
 
@@ -35,8 +35,8 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Accountant',
-        href: accountant.dashboard().url,
+        title: 'Finance',
+        href: admin.finance.dashboard().url,
     },
     {
         title: 'Transactions',

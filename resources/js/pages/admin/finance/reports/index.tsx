@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import accountant from '@/routes/accountant';
+import admin from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { BarChart3, FileText, TrendingUp } from 'lucide-react';
@@ -14,8 +14,8 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Accountant',
-        href: accountant.dashboard().url,
+        title: 'Finance',
+        href: admin.finance.dashboard().url,
     },
     {
         title: 'Reports',

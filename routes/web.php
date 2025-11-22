@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Accountant\DashboardController as AccountantDashboardController;
-use App\Http\Controllers\Accountant\PurchaseController as AccountantPurchaseController;
-use App\Http\Controllers\Accountant\ReportController as AccountantReportController;
-use App\Http\Controllers\Accountant\TransactionController as AccountantTransactionController;
 use App\Http\Controllers\Admin\CreditPackageController;
 use App\Http\Controllers\Admin\CreditPurchaseController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\Finance\DashboardController as FinanceDashboardController;
+use App\Http\Controllers\Admin\Finance\ReportController as FinanceReportController;
+use App\Http\Controllers\Admin\Finance\TransactionController as FinanceTransactionController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Attendee\DashboardController as AttendeeDashboardController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\LessonController;
@@ -29,54 +30,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = auth()->user();
         
-        // Redirect admin to admin dashboard
+        // Redirect admins to finance dashboard
         if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.finance.dashboard');
         }
         
-        $data = ['role' => $user->role];
-        
-        // Attendee-specific data
-        if ($user->isAttendee()) {
-            $creditService = app(\App\Services\CreditService::class);
-            $data['creditBalance'] = $creditService->getBalance($user);
-            $data['upcomingBookings'] = $user->bookings()
-                ->with('lesson')
-                ->whereHas('lesson', fn($q) => $q->where('start_datetime', '>=', now()))
-                ->where('status', 'booked')
-                ->orderBy('created_at', 'desc')
-                ->limit(10)
-                ->get();
-            $data['expiringCredits'] = $creditService->getExpiringCredits($user);
-        }
-        
-        // Teacher-specific data
+        // Redirect teachers to their dashboard
         if ($user->isTeacher()) {
-            $data['upcomingLessons'] = $user->taughtLessons()
-                ->with('bookings')
-                ->where('status', 'active')
-                ->where('start_datetime', '>=', now())
-                ->orderBy('start_datetime')
-                ->limit(10)
-                ->get()
-                ->map(fn($lesson) => [
-                    'id' => $lesson->id,
-                    'title' => $lesson->title,
-                    'start_datetime' => $lesson->start_datetime->format('D, M j, Y H:i'),
-                    'location' => $lesson->location,
-                    'capacity' => $lesson->capacity,
-                    'bookings_count' => $lesson->bookings()->count(),
-                ]);
-            $data['todayClasses'] = $user->taughtLessons()
-                ->whereDate('start_datetime', today())
-                ->count();
-            $data['totalStudents'] = \App\Models\Booking::whereHas('lesson', fn($q) => 
-                $q->where('teacher_id', $user->id)
-            )->distinct('user_id')->count('user_id');
+            return redirect()->route('teacher.dashboard');
         }
         
+        // Redirect attendees to their dashboard
+        if ($user->isAttendee()) {
+            return redirect()->route('attendee.dashboard');
+        }
         
-        return Inertia::render('dashboard', $data);
+        // Fallback for unknown roles
+        abort(403, 'Invalid user role');
     })->name('dashboard');
 
     // User Profile routes (for pupil profile management)
@@ -88,6 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('my-profile/password', [ProfileController::class, 'updatePassword'])->name('my-profile.password');
 
     // Lesson routes
+    Route::get('lessons/all', [LessonController::class, 'all'])->name('lessons.all');
     Route::resource('lessons', LessonController::class);
     Route::post('lessons/{lesson}/cancel', [LessonController::class, 'cancel'])->name('lessons.cancel');
 
@@ -109,38 +80,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('credits/purchase', [CreditController::class, 'purchase'])->name('credits.purchase');
     Route::get('credits/purchase/{purchase}', [CreditController::class, 'showPurchase'])->name('credits.purchase.show');
 
-    // Admin routes (teachers with admin flag)
-    Route::middleware(['role:teacher'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    // Attendee dashboard
+    Route::get('attendee/dashboard', [AttendeeDashboardController::class, 'index'])->name('attendee.dashboard');
+
+    // Teacher dashboard
+    Route::get('teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+
+    // Admin routes
+    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('lessons', [AdminDashboardController::class, 'index'])->name('lessons.index');
         
         // User management
         Route::resource('users', AdminUserController::class);
         Route::post('users/{user}/credits', [AdminUserController::class, 'adjustCredits'])->name('users.credits');
         
-        // Credit package management
-        Route::resource('credit-packages', CreditPackageController::class);
+        // Credit management
+        Route::resource('credits', CreditPackageController::class);
         
-        // Purchase management
-        Route::get('purchases', [CreditPurchaseController::class, 'index'])->name('purchases.index');
-        Route::post('purchases/{purchase}/confirm', [CreditPurchaseController::class, 'confirmPayment'])->name('purchases.confirm');
-    });
-
-    // Accountant routes (now handled by admin teachers)
-    Route::middleware(['role:teacher'])->prefix('accountant')->name('accountant.')->group(function () {
-        Route::get('dashboard', [AccountantDashboardController::class, 'index'])->name('dashboard');
+        // Finance dashboard
+        Route::get('finance', [FinanceDashboardController::class, 'index'])->name('finance.dashboard');
         
-        // Purchase management (read-only)
-        Route::get('purchases', [AccountantPurchaseController::class, 'index'])->name('purchases.index');
-        Route::get('purchases/{purchase}', [AccountantPurchaseController::class, 'show'])->name('purchases.show');
+        // Purchase management (consolidated under finance)
+        Route::get('finance/purchases', [CreditPurchaseController::class, 'index'])->name('finance.purchases.index');
+        Route::get('finance/purchases/{purchase}', [CreditPurchaseController::class, 'show'])->name('finance.purchases.show');
+        Route::post('finance/purchases/{purchase}/confirm', [CreditPurchaseController::class, 'confirmPayment'])->name('finance.purchases.confirm');
+        Route::delete('finance/purchases/{purchase}', [CreditPurchaseController::class, 'destroy'])->name('finance.purchases.destroy');
         
-        // Transaction management (read-only)
-        Route::get('transactions', [AccountantTransactionController::class, 'index'])->name('transactions.index');
+        // Transaction reports (read-only view)
+        Route::get('finance/transactions', [FinanceTransactionController::class, 'index'])->name('finance.transactions.index');
         
         // Reports and exports
-        Route::get('reports', [AccountantReportController::class, 'index'])->name('reports.index');
-        Route::get('reports/revenue', [AccountantReportController::class, 'revenue'])->name('reports.revenue');
-        Route::get('reports/export/purchases', [AccountantReportController::class, 'exportPurchases'])->name('reports.export.purchases');
-        Route::get('reports/export/transactions', [AccountantReportController::class, 'exportTransactions'])->name('reports.export.transactions');
+        Route::get('finance/reports', [FinanceReportController::class, 'index'])->name('finance.reports.index');
+        Route::get('finance/reports/revenue', [FinanceReportController::class, 'revenue'])->name('finance.reports.revenue');
+        Route::get('finance/reports/export/purchases', [FinanceReportController::class, 'exportPurchases'])->name('finance.reports.export.purchases');
+        Route::get('finance/reports/export/transactions', [FinanceReportController::class, 'exportTransactions'])->name('finance.reports.export.transactions');
     });
 });
 

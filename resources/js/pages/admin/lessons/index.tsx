@@ -3,12 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
 import lessons from '@/routes/lessons';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type PaginatedData } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Calendar, CreditCard, PlusCircle, TrendingUp, Users } from 'lucide-react';
+import { Calendar, PlusCircle, TrendingUp, Users } from 'lucide-react';
 
 interface DashboardStats {
-    total_pupils: number;
+    total_attendees: number;
     total_teachers: number;
     upcoming_lessons: number;
     total_bookings_this_month: number;
@@ -33,41 +33,82 @@ interface RecentBooking {
     created_at: string;
 }
 
+interface AllLesson {
+    id: number;
+    title: string;
+    teacher: string;
+    start_datetime: string;
+    location: string;
+    status: string;
+    bookings_count: number;
+    capacity: number;
+    available_spots: number;
+}
+
 interface Props {
     stats: DashboardStats;
     upcoming_lessons: UpcomingLesson[];
     recent_bookings: RecentBooking[];
+    all_lessons: PaginatedData<AllLesson>;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Admin Dashboard',
-        href: admin.dashboard().url,
+        title: 'Admin',
+        href: admin.lessons.index().url,
+    },
+    {
+        title: 'Lessons',
+        href: admin.lessons.index().url,
     },
 ];
 
-export default function AdminDashboard({ stats, upcoming_lessons, recent_bookings }: Props) {
+export default function AdminDashboard({ stats, upcoming_lessons, recent_bookings, all_lessons }: Props) {
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleString('nl-NL', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+
+    const getStatusBadge = (status: string) => {
+        const styles = {
+            active: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
+            cancelled: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
+            completed: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
+        };
+        return styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Admin Dashboard" />
+            <Head title="Lessons Management" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 {/* Page Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+                        <h1 className="text-3xl font-bold">Lessons Management</h1>
                         <p className="text-muted-foreground">Manage your yoga school</p>
                     </div>
+                    <Button asChild size="lg">
+                        <Link href={lessons.create().url}>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Create Lesson
+                        </Link>
+                    </Button>
                 </div>
 
                 {/* Quick Stats */}
                 <div className="grid gap-4 md:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Pupils</CardTitle>
+                            <CardTitle className="text-sm font-medium">Total Attendees</CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total_pupils}</div>
+                            <div className="text-2xl font-bold">{stats.total_attendees}</div>
                             <p className="text-xs text-muted-foreground">Active students</p>
                         </CardContent>
                     </Card>
@@ -105,46 +146,6 @@ export default function AdminDashboard({ stats, upcoming_lessons, recent_booking
                         </CardContent>
                     </Card>
                 </div>
-
-                {/* Quick Actions */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Quick Actions</CardTitle>
-                        <CardDescription>Common administrative tasks</CardDescription>
-                    </CardHeader>
-                    <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                        <Button asChild className="h-auto flex-col gap-2 py-4">
-                            <Link href={admin.users.create().url}>
-                                <PlusCircle className="h-6 w-6" />
-                                <span>Add User</span>
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-                            <Link href={lessons.create().url}>
-                                <PlusCircle className="h-6 w-6" />
-                                <span>Create Lesson</span>
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-                            <Link href={admin.users.index().url}>
-                                <Users className="h-6 w-6" />
-                                <span>Manage Users</span>
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-                            <Link href={admin.creditPackages.index().url}>
-                                <CreditCard className="h-6 w-6" />
-                                <span>Credit Packages</span>
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline" className="h-auto flex-col gap-2 py-4">
-                            <Link href={admin.purchases.index().url}>
-                                <CreditCard className="h-6 w-6" />
-                                <span>Purchases</span>
-                            </Link>
-                        </Button>
-                    </CardContent>
-                </Card>
 
                 <div className="grid gap-6 md:grid-cols-2">
                     {/* Upcoming Lessons */}
@@ -215,6 +216,78 @@ export default function AdminDashboard({ stats, upcoming_lessons, recent_booking
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* All Lessons Table */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>All Lessons</CardTitle>
+                        <CardDescription>Complete overview of all lessons</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b text-left text-sm font-medium text-muted-foreground">
+                                        <th className="pb-3">Title</th>
+                                        <th className="pb-3">Teacher</th>
+                                        <th className="pb-3">Date & Time</th>
+                                        <th className="pb-3">Location</th>
+                                        <th className="pb-3">Bookings</th>
+                                        <th className="pb-3">Status</th>
+                                        <th className="pb-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {all_lessons.data.map((lesson) => (
+                                        <tr key={lesson.id} className="border-b last:border-0">
+                                            <td className="py-3 font-medium">{lesson.title}</td>
+                                            <td className="py-3 text-sm">{lesson.teacher}</td>
+                                            <td className="py-3 text-sm">{formatDate(lesson.start_datetime)}</td>
+                                            <td className="py-3 text-sm">{lesson.location}</td>
+                                            <td className="py-3 text-sm">
+                                                {lesson.bookings_count} / {lesson.capacity}
+                                                <span className="ml-2 text-xs text-muted-foreground">
+                                                    ({lesson.available_spots} left)
+                                                </span>
+                                            </td>
+                                            <td className="py-3">
+                                                <span className={`rounded-full px-2 py-1 text-xs ${getStatusBadge(lesson.status)}`}>
+                                                    {lesson.status}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 text-right">
+                                                <Button asChild variant="ghost" size="sm">
+                                                    <Link href={`/lessons/${lesson.id}`}>View</Link>
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        {/* Pagination */}
+                        {all_lessons.links.length > 3 && (
+                            <div className="mt-4 flex items-center justify-center gap-2">
+                                {all_lessons.links.map((link, index) => (
+                                    <Button
+                                        key={index}
+                                        asChild={!!link.url}
+                                        variant={link.active ? 'default' : 'outline'}
+                                        size="sm"
+                                        disabled={!link.url}
+                                    >
+                                        {link.url ? (
+                                            <Link href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                        ) : (
+                                            <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                        )}
+                                    </Button>
+                                ))}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );

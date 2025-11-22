@@ -10,9 +10,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import accountant from '@/routes/accountant';
-import purchases from '@/routes/accountant/purchases';
-import reportsExport from '@/routes/accountant/reports/export';
+import admin from '@/routes/admin';
 import { type BreadcrumbItem, type PaginatedData } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { Download, Eye, Search } from 'lucide-react';
@@ -57,19 +55,19 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Accountant',
-        href: accountant.dashboard().url,
+        title: 'Finance',
+        href: admin.finance.dashboard().url,
     },
     {
         title: 'Purchases',
-        href: purchases.index().url,
+        href: admin.finance.purchases.index().url,
     },
 ];
 
 export default function PurchasesIndex({ purchases: purchasesData, filters, summary }: Props) {
     const [search, setSearch] = useState(filters.search || '');
-    const [status, setStatus] = useState(filters.status || '');
-    const [paymentMethod, setPaymentMethod] = useState(filters.payment_method || '');
+    const [status, setStatus] = useState(filters.status || 'all');
+    const [paymentMethod, setPaymentMethod] = useState(filters.payment_method || 'all');
     const [dateFrom, setDateFrom] = useState(filters.date_from || '');
     const [dateTo, setDateTo] = useState(filters.date_to || '');
 
@@ -83,11 +81,11 @@ export default function PurchasesIndex({ purchases: purchasesData, filters, summ
     const handleFilter = (e: FormEvent) => {
         e.preventDefault();
         router.get(
-            purchases.index().url,
+            admin.finance.purchases.index().url,
             {
                 search,
-                status,
-                payment_method: paymentMethod,
+                ...(status !== 'all' && { status }),
+                ...(paymentMethod !== 'all' && { payment_method: paymentMethod }),
                 date_from: dateFrom,
                 date_to: dateTo,
             },
@@ -101,7 +99,7 @@ export default function PurchasesIndex({ purchases: purchasesData, filters, summ
             date_to: dateTo || new Date().toISOString().split('T')[0],
             ...(status && { status }),
         });
-        window.location.href = `${reportsExport.purchases().url}?${params}`;
+        window.location.href = `${admin.finance.reports.export.purchases().url}?${params}`;
     };
 
     const getStatusBadge = (status: string) => {
@@ -181,7 +179,7 @@ export default function PurchasesIndex({ purchases: purchasesData, filters, summ
                                         <SelectValue placeholder="All statuses" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All statuses</SelectItem>
+                                        <SelectItem value="all">All statuses</SelectItem>
                                         <SelectItem value="pending">Pending</SelectItem>
                                         <SelectItem value="paid">Paid</SelectItem>
                                         <SelectItem value="cancelled">Cancelled</SelectItem>
@@ -196,7 +194,7 @@ export default function PurchasesIndex({ purchases: purchasesData, filters, summ
                                         <SelectValue placeholder="All methods" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All methods</SelectItem>
+                                        <SelectItem value="all">All methods</SelectItem>
                                         <SelectItem value="ideal">iDEAL</SelectItem>
                                         <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
                                         <SelectItem value="manual">Manual</SelectItem>
@@ -280,7 +278,7 @@ export default function PurchasesIndex({ purchases: purchasesData, filters, summ
                                             <td className="py-3 text-sm capitalize">{purchase.payment_method || '-'}</td>
                                             <td className="py-3 text-right">
                                                 <Button asChild variant="ghost" size="sm">
-                                                    <Link href={purchases.show(purchase.id).url}>
+                                                    <Link href={admin.finance.purchases.show(purchase.id).url}>
                                                         <Eye className="h-4 w-4" />
                                                     </Link>
                                                 </Button>

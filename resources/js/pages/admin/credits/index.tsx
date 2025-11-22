@@ -23,25 +23,25 @@ interface Props {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Admin', href: admin.dashboard().url },
-    { title: 'Credit Packages', href: admin.creditPackages.index().url },
+    { title: 'Admin', href: admin.lessons.index().url },
+    { title: 'Credits', href: admin.credits.index().url },
 ];
 
 export default function CreditPackagesIndex({ packages }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Credit Packages" />
+            <Head title="Credits" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold">Credit Packages</h1>
+                        <h1 className="text-3xl font-bold">Credits</h1>
                         <p className="text-muted-foreground">
                             Manage credit packages available for purchase
                         </p>
                     </div>
                     <Button asChild>
-                        <Link href={admin.creditPackages.create().url}>
+                        <Link href={admin.credits.create().url}>
                             <PlusCircle className="mr-2 h-4 w-4" />
                             Add Package
                         </Link>
@@ -107,12 +107,12 @@ export default function CreditPackagesIndex({ packages }: Props) {
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
                             <CreditCard className="h-12 w-12 text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-semibold mb-2">No Credit Packages</h3>
+                            <h3 className="text-lg font-semibold mb-2">No Credits</h3>
                             <p className="text-muted-foreground text-center mb-4">
                                 Create your first credit package to get started.
                             </p>
                             <Button asChild>
-                                <Link href={admin.creditPackages.create().url}>
+                                <Link href={admin.credits.create().url}>
                                     <PlusCircle className="mr-2 h-4 w-4" />
                                     Create Package
                                 </Link>

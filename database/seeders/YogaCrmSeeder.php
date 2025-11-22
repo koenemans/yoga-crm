@@ -16,15 +16,14 @@ class YogaCrmSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user (teacher with admin privileges)
+        // Create admin user
         User::create([
             'name' => 'Admin User',
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@yoga.test',
             'password' => Hash::make('password'),
-            'role' => 'teacher',
-            'is_admin' => true,
+            'role' => 'admin',
             'preferred_language' => 'nl',
             'is_active' => true,
         ]);
@@ -98,7 +97,7 @@ class YogaCrmSeeder extends Seeder
         ]);
 
         $this->command->info('Yoga CRM seeded successfully!');
-        $this->command->info('Admin (Teacher): admin@yoga.test / password');
+        $this->command->info('Admin: admin@yoga.test / password');
         $this->command->info('Teacher: teacher@yoga.test / password');
         $this->command->info('Attendee: attendee@yoga.test / password');
     }

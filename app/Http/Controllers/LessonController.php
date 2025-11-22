@@ -32,7 +32,8 @@ class LessonController extends Controller
             ->where('start_datetime', '>=', now())
             ->orderBy('start_datetime');
 
-        if ($request->user()->isTeacher() && !$request->boolean('all')) {
+        // Teachers see only their lessons by default
+        if ($request->user()->isTeacher()) {
             $query->where('teacher_id', $request->user()->id);
         }
 
@@ -60,6 +61,47 @@ class LessonController extends Controller
         });
 
         return Inertia::render('lessons/index', [
+            'lessons' => $lessons,
+            'user_credit_balance' => $this->creditService->getBalance($request->user()),
+        ]);
+    }
+
+    /**
+     * Display all lessons (for teachers to view all lessons in read-only mode).
+     */
+    public function all(Request $request)
+    {
+        $this->authorize('viewAny', Lesson::class);
+
+        $query = Lesson::with(['teacher', 'bookings'])
+            ->where('status', 'active')
+            ->where('start_datetime', '>=', now())
+            ->orderBy('start_datetime');
+
+        $lessons = $query->paginate(20)->through(function ($lesson) use ($request) {
+            return [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+                'description' => $lesson->description,
+                'teacher' => [
+                    'id' => $lesson->teacher->id,
+                    'name' => $lesson->teacher->full_name,
+                ],
+                'location' => $lesson->location,
+                'start_datetime' => $lesson->start_datetime,
+                'end_datetime' => $lesson->end_datetime,
+                'capacity' => $lesson->capacity,
+                'credits_required' => $lesson->credits_required,
+                'available_spots' => $lesson->available_spots,
+                'is_full' => $lesson->isFull(),
+                'waitlist_enabled' => $lesson->waitlist_enabled,
+                'bookings_count' => $lesson->bookings()->count(),
+                'user_booked' => $this->bookingService->hasBooking($request->user(), $lesson),
+                'user_on_waitlist' => $this->bookingService->isOnWaitlist($request->user(), $lesson),
+            ];
+        });
+
+        return Inertia::render('lessons/all', [
             'lessons' => $lessons,
             'user_credit_balance' => $this->creditService->getBalance($request->user()),
         ]);
@@ -101,6 +143,12 @@ class LessonController extends Controller
         ]);
 
         $lesson = Lesson::create($validated);
+
+        // Redirect admins to admin lessons dashboard, others to lesson show page
+        if ($request->user()->isAdmin()) {
+            return redirect()->route('admin.lessons.index')
+                ->with('success', 'Lesson created successfully.');
+        }
 
         return redirect()->route('lessons.show', $lesson)
             ->with('success', 'Lesson created successfully.');
@@ -195,6 +243,12 @@ class LessonController extends Controller
         ]);
 
         $lesson->update($validated);
+
+        // Redirect admins to admin lessons dashboard, others to lesson show page
+        if ($request->user()->isAdmin()) {
+            return redirect()->route('admin.lessons.index')
+                ->with('success', 'Lesson updated successfully.');
+        }
 
         return redirect()->route('lessons.show', $lesson)
             ->with('success', 'Lesson updated successfully.');

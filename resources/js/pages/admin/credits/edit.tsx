@@ -9,41 +9,56 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Admin', href: admin.dashboard().url },
-    { title: 'Credit Packages', href: admin.creditPackages.index().url },
-    { title: 'Create', href: admin.creditPackages.create().url },
-];
+interface CreditPackage {
+    id: number;
+    name: string;
+    description: string;
+    credits: number;
+    price: string | number;
+    expiry_days: number | null;
+    sort_order: number;
+    is_active: boolean;
+}
 
-export default function CreateCreditPackage() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        description: '',
-        credits: '',
-        price: '',
-        expiry_days: '',
-        sort_order: '0',
-        is_active: true,
+interface Props {
+    package: CreditPackage;
+}
+
+export default function EditCreditPackage({ package: pkg }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Admin', href: admin.lessons.index().url },
+        { title: 'Credits', href: admin.credits.index().url },
+        { title: pkg.name, href: `/admin/credit-packages/${pkg.id}/edit` },
+    ];
+
+    const { data, setData, put, processing, errors } = useForm({
+        name: pkg.name,
+        description: pkg.description || '',
+        credits: pkg.credits.toString(),
+        price: Number(pkg.price).toString(),
+        expiry_days: pkg.expiry_days?.toString() || '',
+        sort_order: pkg.sort_order.toString(),
+        is_active: pkg.is_active,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(admin.creditPackages.store().url);
+        put(`/admin/credit-packages/${pkg.id}`);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Credit Package" />
+            <Head title={`Edit ${pkg.name}`} />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div className="flex items-center gap-4">
                     <Button asChild variant="outline" size="icon">
-                        <Link href={admin.creditPackages.index().url}>
+                        <Link href={admin.credits.index().url}>
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-bold">Create Credit Package</h1>
-                        <p className="text-muted-foreground">Add a new credit package for purchase</p>
+                        <h1 className="text-3xl font-bold">Edit Credit</h1>
+                        <p className="text-muted-foreground">Update package information</p>
                     </div>
                 </div>
 
@@ -51,7 +66,7 @@ export default function CreateCreditPackage() {
                     <Card className="max-w-2xl">
                         <CardHeader>
                             <CardTitle>Package Details</CardTitle>
-                            <CardDescription>Configure the credit package information</CardDescription>
+                            <CardDescription>Modify the credit package information</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
@@ -60,7 +75,6 @@ export default function CreateCreditPackage() {
                                     id="name"
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
-                                    placeholder="e.g., 5 Class Package"
                                     required
                                 />
                                 {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
@@ -72,7 +86,6 @@ export default function CreateCreditPackage() {
                                     id="description"
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
-                                    placeholder="Describe the package..."
                                     rows={3}
                                 />
                                 {errors.description && <p className="text-sm text-destructive">{errors.description}</p>}
@@ -150,10 +163,10 @@ export default function CreateCreditPackage() {
 
                             <div className="flex gap-4 pt-4">
                                 <Button type="submit" disabled={processing}>
-                                    {processing ? 'Creating...' : 'Create Package'}
+                                    {processing ? 'Saving...' : 'Save Changes'}
                                 </Button>
                                 <Button asChild variant="outline" type="button">
-                                    <Link href={admin.creditPackages.index().url}>Cancel</Link>
+                                    <Link href={admin.credits.index().url}>Cancel</Link>
                                 </Button>
                             </div>
                         </CardContent>

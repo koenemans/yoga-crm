@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import accountant from '@/routes/accountant';
-import purchases from '@/routes/accountant/purchases';
+import admin from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft, CheckCircle, Trash2 } from 'lucide-react';
 
 interface Purchase {
     id: number;
@@ -42,12 +41,12 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Accountant',
-        href: accountant.dashboard().url,
+        title: 'Finance',
+        href: admin.finance.dashboard().url,
     },
     {
         title: 'Purchases',
-        href: purchases.index().url,
+        href: admin.finance.purchases.index().url,
     },
     {
         title: 'Purchase Details',
@@ -72,6 +71,33 @@ export default function PurchaseShow({ purchase }: Props) {
         return styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
     };
 
+    const handleConfirmPayment = () => {
+        if (confirm('Are you sure you want to confirm this payment? This will credit the user\'s account.')) {
+            router.post(
+                admin.finance.purchases.confirm(purchase.id).url,
+                {},
+                {
+                    onSuccess: () => {
+                        router.visit(admin.finance.purchases.index().url);
+                    },
+                }
+            );
+        }
+    };
+
+    const handleDeletePurchase = () => {
+        if (confirm('Are you sure you want to delete this purchase? This action cannot be undone.')) {
+            router.delete(
+                admin.finance.purchases.destroy(purchase.id).url,
+                {
+                    onSuccess: () => {
+                        router.visit(admin.finance.purchases.index().url);
+                    },
+                }
+            );
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Purchase #${purchase.id}`} />
@@ -82,12 +108,24 @@ export default function PurchaseShow({ purchase }: Props) {
                         <h1 className="text-3xl font-bold">Purchase #{purchase.id}</h1>
                         <p className="text-muted-foreground">Purchase details and transaction history</p>
                     </div>
-                    <Button asChild variant="outline">
-                        <Link href={purchases.index().url}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Purchases
-                        </Link>
-                    </Button>
+                    <div className="flex gap-2">
+                        {purchase.status === 'pending' && (
+                            <Button onClick={handleConfirmPayment} variant="default">
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Confirm Payment
+                            </Button>
+                        )}
+                        <Button onClick={handleDeletePurchase} variant="destructive">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                        </Button>
+                        <Button asChild variant="outline">
+                            <Link href={admin.finance.purchases.index().url}>
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                Back to Purchases
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">

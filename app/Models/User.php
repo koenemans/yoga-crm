@@ -26,7 +26,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'is_admin',
         'first_name',
         'last_name',
         'phone',
@@ -65,7 +64,6 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
             'date_of_birth' => 'date',
             'is_active' => 'boolean',
-            'is_admin' => 'boolean',
         ];
     }
 
@@ -78,11 +76,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an admin (teacher with admin privileges).
+     * Check if user is an admin.
      */
     public function isAdmin(): bool
     {
-        return $this->is_admin === true;
+        return $this->role === 'admin';
     }
 
     /**
@@ -109,14 +107,6 @@ class User extends Authenticatable
         return $this->isAttendee();
     }
 
-    /**
-     * Check if user is an accountant (now handled by admin flag).
-     * @deprecated Use isAdmin() instead
-     */
-    public function isAccountant(): bool
-    {
-        return $this->isAdmin();
-    }
 
     /**
      * Get lessons taught by this teacher.

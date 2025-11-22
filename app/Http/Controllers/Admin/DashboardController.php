@@ -68,10 +68,28 @@ class DashboardController extends Controller
                 ];
             });
 
-        return Inertia::render('admin/dashboard', [
+        $allLessons = Lesson::with(['teacher', 'bookings'])
+            ->orderBy('start_datetime', 'desc')
+            ->paginate(20)
+            ->through(function ($lesson) {
+                return [
+                    'id' => $lesson->id,
+                    'title' => $lesson->title,
+                    'teacher' => $lesson->teacher->full_name,
+                    'start_datetime' => $lesson->start_datetime,
+                    'location' => $lesson->location,
+                    'status' => $lesson->status,
+                    'bookings_count' => $lesson->bookings()->count(),
+                    'capacity' => $lesson->capacity,
+                    'available_spots' => $lesson->available_spots,
+                ];
+            });
+
+        return Inertia::render('admin/lessons/index', [
             'stats' => $stats,
             'upcoming_lessons' => $upcomingLessons,
             'recent_bookings' => $recentBookings,
+            'all_lessons' => $allLessons,
         ]);
     }
 }

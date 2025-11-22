@@ -18,7 +18,7 @@ class CreditPackageController extends Controller
     {
         $packages = CreditPackage::ordered()->get();
 
-        return Inertia::render('admin/credit-packages/index', [
+        return Inertia::render('admin/credits/index', [
             'packages' => $packages,
         ]);
     }
@@ -28,7 +28,7 @@ class CreditPackageController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/credit-packages/create');
+        return Inertia::render('admin/credits/create');
     }
 
     /**
@@ -57,7 +57,7 @@ class CreditPackageController extends Controller
      */
     public function edit(CreditPackage $creditPackage)
     {
-        return Inertia::render('admin/credit-packages/edit', [
+        return Inertia::render('admin/credits/edit', [
             'package' => $creditPackage,
         ]);
     }

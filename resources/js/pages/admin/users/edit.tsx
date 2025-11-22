@@ -18,7 +18,6 @@ interface UserData {
     last_name: string;
     email: string;
     role: string;
-    is_admin: boolean;
     phone: string;
     date_of_birth: string;
     address: string;
@@ -35,7 +34,7 @@ interface Props {
 
 export default function EditUser({ user }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Admin', href: admin.dashboard().url },
+        { title: 'Admin', href: admin.lessons.index().url },
         { title: 'Users', href: admin.users.index().url },
         { title: user.name, href: `/admin/users/${user.id}` },
         { title: 'Edit', href: `/admin/users/${user.id}/edit` },
@@ -46,7 +45,6 @@ export default function EditUser({ user }: Props) {
         last_name: user.last_name || '',
         email: user.email,
         role: user.role,
-        is_admin: user.is_admin || false,
         phone: user.phone || '',
         date_of_birth: user.date_of_birth || '',
         address: user.address || '',
@@ -193,6 +191,7 @@ export default function EditUser({ user }: Props) {
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem value="admin">Admin</SelectItem>
                                                 <SelectItem value="teacher">Teacher</SelectItem>
                                                 <SelectItem value="attendee">Attendee</SelectItem>
                                             </SelectContent>
@@ -212,19 +211,6 @@ export default function EditUser({ user }: Props) {
                                         </Select>
                                     </div>
                                 </div>
-
-                                {data.role === 'teacher' && (
-                                    <div className="flex items-center space-x-2">
-                                        <Checkbox
-                                            id="is_admin"
-                                            checked={data.is_admin}
-                                            onCheckedChange={(checked) => setData('is_admin', checked as boolean)}
-                                        />
-                                        <Label htmlFor="is_admin" className="cursor-pointer">
-                                            Grant admin privileges (can manage users, packages, and view financial reports)
-                                        </Label>
-                                    </div>
-                                )}
 
                                 <div className="flex items-center space-x-2">
                                     <Checkbox

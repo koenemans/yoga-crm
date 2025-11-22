@@ -42,6 +42,7 @@ interface Props {
 }
 
 const roleColors = {
+    admin: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100',
     teacher: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
     attendee: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
 };
@@ -50,7 +51,7 @@ export default function UserShow({ user, credit_balance, expiring_credits, can_v
     const [showCreditAdjustment, setShowCreditAdjustment] = useState(false);
     
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Admin', href: admin.dashboard().url },
+        { title: 'Admin', href: admin.lessons.index().url },
         { title: 'Users', href: admin.users.index().url },
         { title: user.name, href: `/admin/users/${user.id}` },
     ];

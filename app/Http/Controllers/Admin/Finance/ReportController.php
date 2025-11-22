@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accountant;
+namespace App\Http\Controllers\Admin\Finance;
 
 use App\Helpers\DatabaseHelper;
 use App\Http\Controllers\Controller;
@@ -26,7 +26,7 @@ class ReportController extends Controller
         $dateFrom = $request->input('date_from', now()->startOfMonth()->toDateString());
         $dateTo = $request->input('date_to', now()->endOfMonth()->toDateString());
 
-        return Inertia::render('accountant/reports/index', [
+        return Inertia::render('admin/finance/reports/index', [
             'filters' => [
                 'date_from' => $dateFrom,
                 'date_to' => $dateTo,

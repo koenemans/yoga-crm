@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
@@ -13,7 +12,7 @@ import { ArrowLeft } from 'lucide-react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Admin',
-        href: admin.dashboard().url,
+        href: admin.lessons.index().url,
     },
     {
         title: 'Users',
@@ -33,7 +32,6 @@ export default function CreateUser() {
         password: '',
         password_confirmation: '',
         role: 'attendee',
-        is_admin: false,
         phone: '',
         date_of_birth: '',
         address: '',
@@ -137,6 +135,7 @@ export default function CreateUser() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem value="admin">Admin</SelectItem>
                                             <SelectItem value="teacher">Teacher</SelectItem>
                                             <SelectItem value="attendee">Attendee</SelectItem>
                                         </SelectContent>
@@ -156,19 +155,6 @@ export default function CreateUser() {
                                     </Select>
                                 </div>
                             </div>
-
-                            {data.role === 'teacher' && (
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="is_admin"
-                                        checked={data.is_admin}
-                                        onCheckedChange={(checked) => setData('is_admin', checked as boolean)}
-                                    />
-                                    <Label htmlFor="is_admin" className="cursor-pointer">
-                                        Grant admin privileges (can manage users, packages, and view financial reports)
-                                    </Label>
-                                </div>
-                            )}
 
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">

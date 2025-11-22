@@ -49,9 +49,54 @@ class CreditPurchaseController extends Controller
                 ];
             });
 
-        return Inertia::render('admin/purchases/index', [
+        return Inertia::render('admin/finance/purchases/index', [
             'purchases' => $purchases,
             'filters' => $request->only(['status']),
+            'summary' => [
+                'total_revenue' => CreditPurchase::where('status', 'paid')->sum('price'),
+                'total_pending' => CreditPurchase::where('status', 'pending')->sum('price'),
+            ],
+        ]);
+    }
+
+    /**
+     * Display a specific purchase.
+     */
+    public function show(CreditPurchase $purchase)
+    {
+        $this->authorize('view', $purchase);
+
+        $purchase->load(['user', 'creditPackage', 'transactions.user', 'confirmedBy']);
+
+        return Inertia::render('admin/finance/purchases/show', [
+            'purchase' => [
+                'id' => $purchase->id,
+                'user' => [
+                    'id' => $purchase->user->id,
+                    'name' => $purchase->user->full_name,
+                    'email' => $purchase->user->email,
+                ],
+                'package' => $purchase->creditPackage ? [
+                    'id' => $purchase->creditPackage->id,
+                    'name' => $purchase->creditPackage->name,
+                    'description' => $purchase->creditPackage->description,
+                ] : null,
+                'credits' => $purchase->credits,
+                'price' => $purchase->price,
+                'status' => $purchase->status,
+                'payment_reference' => $purchase->payment_reference,
+                'payment_method' => $purchase->payment_method,
+                'confirmed_by' => $purchase->confirmedBy?->full_name,
+                'created_at' => $purchase->created_at->format('M j, Y H:i'),
+                'paid_at' => $purchase->paid_at?->format('M j, Y H:i'),
+                'transactions' => $purchase->transactions->map(fn($t) => [
+                    'id' => $t->id,
+                    'credits' => $t->credits,
+                    'type' => $t->type,
+                    'description' => $t->description,
+                    'created_at' => $t->created_at->format('M j, Y H:i'),
+                ]),
+            ],
         ]);
     }
 
@@ -75,5 +120,23 @@ class CreditPurchaseController extends Controller
         $this->creditService->processPurchasePayment($purchase, $request->user());
 
         return back()->with('success', 'Payment confirmed and credits added.');
+    }
+
+    /**
+     * Delete a purchase.
+     */
+    public function destroy(CreditPurchase $purchase)
+    {
+        $this->authorize('delete', $purchase);
+
+        // Only allow deletion of pending or cancelled purchases
+        if ($purchase->status === 'paid') {
+            return back()->with('error', 'Cannot delete a paid purchase. Please contact support if you need to reverse this transaction.');
+        }
+
+        $purchase->delete();
+
+        return redirect()->route('admin.finance.purchases.index')
+            ->with('success', 'Purchase deleted successfully.');
     }
 }

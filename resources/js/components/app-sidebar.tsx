@@ -9,14 +9,23 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
 import admin from '@/routes/admin';
 import bookings from '@/routes/bookings';
 import credits from '@/routes/credits';
-import { dashboard } from '@/routes';
 import lessons from '@/routes/lessons';
 import { type NavItem, type User } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, Calendar, CreditCard, DollarSign, History, LayoutGrid, PlusCircle, Users } from 'lucide-react';
+import {
+    BarChart3,
+    Calendar,
+    CreditCard,
+    DollarSign,
+    History,
+    LayoutGrid,
+    PlusCircle,
+    Users,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const getNavItemsForRole = (role: string): NavItem[] => {

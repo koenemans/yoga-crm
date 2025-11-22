@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import credits from '@/routes/credits';
 import { type BreadcrumbItem } from '@/types';
@@ -52,7 +58,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function CreditsIndex({ packages, balance, transactions, expiring_credits }: Props) {
+export default function CreditsIndex({
+    packages,
+    balance,
+    transactions,
+    expiring_credits,
+}: Props) {
     const handlePurchase = (packageId: number) => {
         router.post(credits.purchase().url, { credit_package_id: packageId });
     };
@@ -72,7 +83,7 @@ export default function CreditsIndex({ packages, balance, transactions, expiring
                 {/* Current Balance */}
                 <Card className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
                     <CardHeader>
-                        <CardTitle className="text-blue-900 dark:text-blue-100 text-3xl">
+                        <CardTitle className="text-3xl text-blue-900 dark:text-blue-100">
                             {balance} Credits
                         </CardTitle>
                         <CardDescription className="text-blue-700 dark:text-blue-300">
@@ -95,9 +106,17 @@ export default function CreditsIndex({ packages, balance, transactions, expiring
                         <CardContent>
                             <div className="space-y-2">
                                 {expiring_credits.map((item, index) => (
-                                    <div key={index} className="flex justify-between text-sm">
+                                    <div
+                                        key={index}
+                                        className="flex justify-between text-sm"
+                                    >
                                         <span>{item.credits} credits</span>
-                                        <span>Expires: {new Date(item.date).toLocaleDateString()}</span>
+                                        <span>
+                                            Expires:{' '}
+                                            {new Date(
+                                                item.date,
+                                            ).toLocaleDateString()}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -107,17 +126,25 @@ export default function CreditsIndex({ packages, balance, transactions, expiring
 
                 {/* Credit Packages */}
                 <div>
-                    <h2 className="text-2xl font-bold mb-4">Purchase Credits</h2>
+                    <h2 className="mb-4 text-2xl font-bold">
+                        Purchase Credits
+                    </h2>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         {packages.map((pkg) => (
                             <Card key={pkg.id} className="flex flex-col">
                                 <CardHeader>
-                                    <CardTitle className="text-2xl">{pkg.name}</CardTitle>
-                                    <CardDescription>{pkg.description}</CardDescription>
+                                    <CardTitle className="text-2xl">
+                                        {pkg.name}
+                                    </CardTitle>
+                                    <CardDescription>
+                                        {pkg.description}
+                                    </CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex flex-1 flex-col gap-4">
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl font-bold">€{Number(pkg.price).toFixed(2)}</span>
+                                        <span className="text-4xl font-bold">
+                                            €{Number(pkg.price).toFixed(2)}
+                                        </span>
                                     </div>
                                     <div className="space-y-2 text-sm text-muted-foreground">
                                         <div className="flex items-center gap-2">
@@ -127,14 +154,21 @@ export default function CreditsIndex({ packages, balance, transactions, expiring
                                         {pkg.expiry_days && (
                                             <div className="flex items-center gap-2">
                                                 <TrendingUp className="h-4 w-4" />
-                                                <span>Valid for {pkg.expiry_days} days</span>
+                                                <span>
+                                                    Valid for {pkg.expiry_days}{' '}
+                                                    days
+                                                </span>
                                             </div>
                                         )}
                                         <div className="text-xs">
-                                            €{(Number(pkg.price) / pkg.credits).toFixed(2)} per credit
+                                            €
+                                            {(
+                                                Number(pkg.price) / pkg.credits
+                                            ).toFixed(2)}{' '}
+                                            per credit
                                         </div>
                                     </div>
-                                    <Button 
+                                    <Button
                                         onClick={() => handlePurchase(pkg.id)}
                                         className="mt-auto"
                                     >
@@ -148,22 +182,36 @@ export default function CreditsIndex({ packages, balance, transactions, expiring
 
                 {/* Transaction History */}
                 <div>
-                    <h2 className="text-2xl font-bold mb-4">Transaction History</h2>
+                    <h2 className="mb-4 text-2xl font-bold">
+                        Transaction History
+                    </h2>
                     <Card>
                         <CardContent className="p-0">
                             <div className="divide-y">
                                 {transactions.data.map((transaction) => (
-                                    <div key={transaction.id} className="flex items-center justify-between p-4">
+                                    <div
+                                        key={transaction.id}
+                                        className="flex items-center justify-between p-4"
+                                    >
                                         <div className="flex-1">
-                                            <p className="font-medium">{transaction.description}</p>
+                                            <p className="font-medium">
+                                                {transaction.description}
+                                            </p>
                                             <p className="text-sm text-muted-foreground">
-                                                {new Date(transaction.created_at).toLocaleString()}
+                                                {new Date(
+                                                    transaction.created_at,
+                                                ).toLocaleString()}
                                             </p>
                                         </div>
-                                        <div className={`text-lg font-bold ${
-                                            transaction.credits > 0 ? 'text-green-600' : 'text-red-600'
-                                        }`}>
-                                            {transaction.credits > 0 ? '+' : ''}{transaction.credits}
+                                        <div
+                                            className={`text-lg font-bold ${
+                                                transaction.credits > 0
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
+                                            }`}
+                                        >
+                                            {transaction.credits > 0 ? '+' : ''}
+                                            {transaction.credits}
                                         </div>
                                     </div>
                                 ))}

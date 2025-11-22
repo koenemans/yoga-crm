@@ -1,9 +1,21 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
@@ -72,7 +84,9 @@ export default function EditUser({ user }: Props) {
                     </Button>
                     <div>
                         <h1 className="text-3xl font-bold">Edit User</h1>
-                        <p className="text-muted-foreground">Update user information</p>
+                        <p className="text-muted-foreground">
+                            Update user information
+                        </p>
                     </div>
                 </div>
 
@@ -86,24 +100,46 @@ export default function EditUser({ user }: Props) {
                             <CardContent className="space-y-4">
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="first_name">First Name *</Label>
+                                        <Label htmlFor="first_name">
+                                            First Name *
+                                        </Label>
                                         <Input
                                             id="first_name"
                                             value={data.first_name}
-                                            onChange={(e) => setData('first_name', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'first_name',
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         />
-                                        {errors.first_name && <p className="text-sm text-destructive">{errors.first_name}</p>}
+                                        {errors.first_name && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.first_name}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="last_name">Last Name *</Label>
+                                        <Label htmlFor="last_name">
+                                            Last Name *
+                                        </Label>
                                         <Input
                                             id="last_name"
                                             value={data.last_name}
-                                            onChange={(e) => setData('last_name', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'last_name',
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         />
-                                        {errors.last_name && <p className="text-sm text-destructive">{errors.last_name}</p>}
+                                        {errors.last_name && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.last_name}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -113,10 +149,16 @@ export default function EditUser({ user }: Props) {
                                         id="email"
                                         type="email"
                                         value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('email', e.target.value)
+                                        }
                                         required
                                     />
-                                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                                    {errors.email && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.email}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2">
@@ -125,16 +167,25 @@ export default function EditUser({ user }: Props) {
                                         <Input
                                             id="phone"
                                             value={data.phone}
-                                            onChange={(e) => setData('phone', e.target.value)}
+                                            onChange={(e) =>
+                                                setData('phone', e.target.value)
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="date_of_birth">Date of Birth</Label>
+                                        <Label htmlFor="date_of_birth">
+                                            Date of Birth
+                                        </Label>
                                         <Input
                                             id="date_of_birth"
                                             type="date"
                                             value={data.date_of_birth}
-                                            onChange={(e) => setData('date_of_birth', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'date_of_birth',
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -144,7 +195,9 @@ export default function EditUser({ user }: Props) {
                                     <Input
                                         id="address"
                                         value={data.address}
-                                        onChange={(e) => setData('address', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('address', e.target.value)
+                                        }
                                     />
                                 </div>
                             </CardContent>
@@ -158,19 +211,33 @@ export default function EditUser({ user }: Props) {
                             <CardContent className="space-y-4">
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="emergency_contact">Contact Name</Label>
+                                        <Label htmlFor="emergency_contact">
+                                            Contact Name
+                                        </Label>
                                         <Input
                                             id="emergency_contact"
                                             value={data.emergency_contact}
-                                            onChange={(e) => setData('emergency_contact', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'emergency_contact',
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="emergency_contact_phone">Contact Phone</Label>
+                                        <Label htmlFor="emergency_contact_phone">
+                                            Contact Phone
+                                        </Label>
                                         <Input
                                             id="emergency_contact_phone"
                                             value={data.emergency_contact_phone}
-                                            onChange={(e) => setData('emergency_contact_phone', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'emergency_contact_phone',
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -186,27 +253,56 @@ export default function EditUser({ user }: Props) {
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="role">Role *</Label>
-                                        <Select value={data.role} onValueChange={(value) => setData('role', value)}>
+                                        <Select
+                                            value={data.role}
+                                            onValueChange={(value) =>
+                                                setData('role', value)
+                                            }
+                                        >
                                             <SelectTrigger>
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="admin">Admin</SelectItem>
-                                                <SelectItem value="teacher">Teacher</SelectItem>
-                                                <SelectItem value="attendee">Attendee</SelectItem>
+                                                <SelectItem value="admin">
+                                                    Admin
+                                                </SelectItem>
+                                                <SelectItem value="teacher">
+                                                    Teacher
+                                                </SelectItem>
+                                                <SelectItem value="attendee">
+                                                    Attendee
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        {errors.role && <p className="text-sm text-destructive">{errors.role}</p>}
+                                        {errors.role && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.role}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="preferred_language">Language *</Label>
-                                        <Select value={data.preferred_language} onValueChange={(value) => setData('preferred_language', value)}>
+                                        <Label htmlFor="preferred_language">
+                                            Language *
+                                        </Label>
+                                        <Select
+                                            value={data.preferred_language}
+                                            onValueChange={(value) =>
+                                                setData(
+                                                    'preferred_language',
+                                                    value,
+                                                )
+                                            }
+                                        >
                                             <SelectTrigger>
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="nl">Dutch</SelectItem>
-                                                <SelectItem value="en">English</SelectItem>
+                                                <SelectItem value="nl">
+                                                    Dutch
+                                                </SelectItem>
+                                                <SelectItem value="en">
+                                                    English
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -216,9 +312,17 @@ export default function EditUser({ user }: Props) {
                                     <Checkbox
                                         id="is_active"
                                         checked={data.is_active}
-                                        onCheckedChange={(checked) => setData('is_active', checked as boolean)}
+                                        onCheckedChange={(checked) =>
+                                            setData(
+                                                'is_active',
+                                                checked as boolean,
+                                            )
+                                        }
                                     />
-                                    <Label htmlFor="is_active" className="cursor-pointer">
+                                    <Label
+                                        htmlFor="is_active"
+                                        className="cursor-pointer"
+                                    >
                                         Account is active
                                     </Label>
                                 </div>
@@ -229,13 +333,21 @@ export default function EditUser({ user }: Props) {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Internal Notes</CardTitle>
-                                <CardDescription>Private notes visible only to admin and teachers</CardDescription>
+                                <CardDescription>
+                                    Private notes visible only to admin and
+                                    teachers
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <Textarea
                                     id="internal_notes"
                                     value={data.internal_notes}
-                                    onChange={(e) => setData('internal_notes', e.target.value)}
+                                    onChange={(e) =>
+                                        setData(
+                                            'internal_notes',
+                                            e.target.value,
+                                        )
+                                    }
                                     rows={5}
                                     placeholder="Add notes about this user..."
                                 />
@@ -248,7 +360,9 @@ export default function EditUser({ user }: Props) {
                                 {processing ? 'Saving...' : 'Save Changes'}
                             </Button>
                             <Button asChild variant="outline" type="button">
-                                <Link href={`/admin/users/${user.id}`}>Cancel</Link>
+                                <Link href={`/admin/users/${user.id}`}>
+                                    Cancel
+                                </Link>
                             </Button>
                         </div>
                     </div>

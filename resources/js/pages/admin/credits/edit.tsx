@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -58,7 +64,9 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                     </Button>
                     <div>
                         <h1 className="text-3xl font-bold">Edit Credit</h1>
-                        <p className="text-muted-foreground">Update package information</p>
+                        <p className="text-muted-foreground">
+                            Update package information
+                        </p>
                     </div>
                 </div>
 
@@ -66,7 +74,9 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                     <Card className="max-w-2xl">
                         <CardHeader>
                             <CardTitle>Package Details</CardTitle>
-                            <CardDescription>Modify the credit package information</CardDescription>
+                            <CardDescription>
+                                Modify the credit package information
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
@@ -74,10 +84,16 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                                 <Input
                                     id="name"
                                     value={data.name}
-                                    onChange={(e) => setData('name', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('name', e.target.value)
+                                    }
                                     required
                                 />
-                                {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                                {errors.name && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.name}
+                                    </p>
+                                )}
                             </div>
 
                             <div className="space-y-2">
@@ -85,24 +101,38 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                                 <Textarea
                                     id="description"
                                     value={data.description}
-                                    onChange={(e) => setData('description', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('description', e.target.value)
+                                    }
                                     rows={3}
                                 />
-                                {errors.description && <p className="text-sm text-destructive">{errors.description}</p>}
+                                {errors.description && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.description}
+                                    </p>
+                                )}
                             </div>
 
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="credits">Number of Credits *</Label>
+                                    <Label htmlFor="credits">
+                                        Number of Credits *
+                                    </Label>
                                     <Input
                                         id="credits"
                                         type="number"
                                         min="1"
                                         value={data.credits}
-                                        onChange={(e) => setData('credits', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('credits', e.target.value)
+                                        }
                                         required
                                     />
-                                    {errors.credits && <p className="text-sm text-destructive">{errors.credits}</p>}
+                                    {errors.credits && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.credits}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="space-y-2">
@@ -113,34 +143,58 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                                         step="0.01"
                                         min="0"
                                         value={data.price}
-                                        onChange={(e) => setData('price', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('price', e.target.value)
+                                        }
                                         required
                                     />
-                                    {errors.price && <p className="text-sm text-destructive">{errors.price}</p>}
+                                    {errors.price && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.price}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
                             <div className="grid gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
-                                    <Label htmlFor="expiry_days">Expiry (days)</Label>
+                                    <Label htmlFor="expiry_days">
+                                        Expiry (days)
+                                    </Label>
                                     <Input
                                         id="expiry_days"
                                         type="number"
                                         min="1"
                                         value={data.expiry_days}
-                                        onChange={(e) => setData('expiry_days', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'expiry_days',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Leave empty for no expiry"
                                     />
-                                    {errors.expiry_days && <p className="text-sm text-destructive">{errors.expiry_days}</p>}
+                                    {errors.expiry_days && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.expiry_days}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="sort_order">Sort Order</Label>
+                                    <Label htmlFor="sort_order">
+                                        Sort Order
+                                    </Label>
                                     <Input
                                         id="sort_order"
                                         type="number"
                                         value={data.sort_order}
-                                        onChange={(e) => setData('sort_order', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'sort_order',
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                     <p className="text-xs text-muted-foreground">
                                         Lower numbers appear first
@@ -153,10 +207,15 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                                     type="checkbox"
                                     id="is_active"
                                     checked={data.is_active}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData('is_active', e.target.checked)}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>,
+                                    ) => setData('is_active', e.target.checked)}
                                     className="h-4 w-4 rounded border-gray-300"
                                 />
-                                <Label htmlFor="is_active" className="cursor-pointer">
+                                <Label
+                                    htmlFor="is_active"
+                                    className="cursor-pointer"
+                                >
                                     Package is active and available for purchase
                                 </Label>
                             </div>
@@ -166,7 +225,9 @@ export default function EditCreditPackage({ package: pkg }: Props) {
                                     {processing ? 'Saving...' : 'Save Changes'}
                                 </Button>
                                 <Button asChild variant="outline" type="button">
-                                    <Link href={admin.credits.index().url}>Cancel</Link>
+                                    <Link href={admin.credits.index().url}>
+                                        Cancel
+                                    </Link>
                                 </Button>
                             </div>
                         </CardContent>

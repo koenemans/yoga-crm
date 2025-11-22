@@ -1,12 +1,25 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import bookings from '@/routes/bookings';
 import credits from '@/routes/credits';
 import lessons from '@/routes/lessons';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Calendar, Clock, CreditCard, History, ShoppingCart, TrendingUp } from 'lucide-react';
+import {
+    Calendar,
+    Clock,
+    CreditCard,
+    History,
+    ShoppingCart,
+    TrendingUp,
+} from 'lucide-react';
 
 interface NextBooking {
     id: number;
@@ -68,15 +81,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function AttendeeDashboard({ credit_balance, next_booking, recent_bookings, waitlist_entries, stats }: Props) {
+export default function AttendeeDashboard({
+    credit_balance,
+    next_booking,
+    recent_bookings,
+    waitlist_entries,
+    stats,
+}: Props) {
     const getStatusBadge = (status: string) => {
         const styles = {
             booked: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
-            attended: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
-            cancelled: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
-            no_show: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
+            attended:
+                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
+            cancelled:
+                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
+            no_show:
+                'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
         };
-        return styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+        return (
+            styles[status as keyof typeof styles] ||
+            'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100'
+        );
     };
 
     return (
@@ -86,7 +111,9 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                 {/* Page Header */}
                 <div>
                     <h1 className="text-3xl font-bold">Welcome Back!</h1>
-                    <p className="text-muted-foreground">Your yoga journey overview</p>
+                    <p className="text-muted-foreground">
+                        Your yoga journey overview
+                    </p>
                 </div>
 
                 {/* Credit Balance - Prominent */}
@@ -100,8 +127,12 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                     <CardContent>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-4xl font-bold">{credit_balance}</p>
-                                <p className="text-sm text-muted-foreground">Available credits</p>
+                                <p className="text-4xl font-bold">
+                                    {credit_balance}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Available credits
+                                </p>
                             </div>
                             <Button asChild size="lg">
                                 <Link href={credits.index().url}>
@@ -117,38 +148,54 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                 <div className="grid gap-4 md:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Bookings
+                            </CardTitle>
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.total_bookings}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.total_bookings}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Attended Classes</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Attended Classes
+                            </CardTitle>
                             <TrendingUp className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.attended_classes}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.attended_classes}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Upcoming</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Upcoming
+                            </CardTitle>
                             <History className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.upcoming_bookings}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.upcoming_bookings}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">On Waitlist</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                On Waitlist
+                            </CardTitle>
                             <Clock className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stats.waitlist_count}</div>
+                            <div className="text-2xl font-bold">
+                                {stats.waitlist_count}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -158,24 +205,35 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                     <Card className="border-l-4 border-l-primary">
                         <CardHeader>
                             <CardTitle>Next Class</CardTitle>
-                            <CardDescription>Your upcoming yoga session</CardDescription>
+                            <CardDescription>
+                                Your upcoming yoga session
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="flex items-start justify-between">
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-semibold">{next_booking.lesson.title}</h3>
+                                    <h3 className="text-xl font-semibold">
+                                        {next_booking.lesson.title}
+                                    </h3>
                                     <p className="text-muted-foreground">
-                                        <strong>Teacher:</strong> {next_booking.lesson.teacher}
+                                        <strong>Teacher:</strong>{' '}
+                                        {next_booking.lesson.teacher}
                                     </p>
                                     <p className="text-muted-foreground">
-                                        <strong>When:</strong> {next_booking.lesson.start_datetime}
+                                        <strong>When:</strong>{' '}
+                                        {next_booking.lesson.start_datetime}
                                     </p>
                                     <p className="text-muted-foreground">
-                                        <strong>Where:</strong> {next_booking.lesson.location}
+                                        <strong>Where:</strong>{' '}
+                                        {next_booking.lesson.location}
                                     </p>
                                 </div>
                                 <Button asChild variant="outline">
-                                    <Link href={`/lessons/${next_booking.lesson.id}`}>View Details</Link>
+                                    <Link
+                                        href={`/lessons/${next_booking.lesson.id}`}
+                                    >
+                                        View Details
+                                    </Link>
                                 </Button>
                             </div>
                         </CardContent>
@@ -186,7 +244,9 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                 <Card>
                     <CardHeader>
                         <CardTitle>Quick Actions</CardTitle>
-                        <CardDescription>What would you like to do?</CardDescription>
+                        <CardDescription>
+                            What would you like to do?
+                        </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4 md:grid-cols-2">
                         <Button asChild className="h-auto flex-col gap-2 py-6">
@@ -195,7 +255,11 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                                 <span className="text-lg">Browse Lessons</span>
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="h-auto flex-col gap-2 py-6">
+                        <Button
+                            asChild
+                            variant="outline"
+                            className="h-auto flex-col gap-2 py-6"
+                        >
                             <Link href={bookings.index().url}>
                                 <History className="h-8 w-8" />
                                 <span className="text-lg">My Bookings</span>
@@ -209,30 +273,47 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                     <Card>
                         <CardHeader>
                             <CardTitle>My Waitlist</CardTitle>
-                            <CardDescription>Classes you're waiting to join</CardDescription>
+                            <CardDescription>
+                                Classes you're waiting to join
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
                                 {waitlist_entries.map((entry) => (
-                                    <div key={entry.id} className="flex items-start justify-between border-b pb-4 last:border-0">
+                                    <div
+                                        key={entry.id}
+                                        className="flex items-start justify-between border-b pb-4 last:border-0"
+                                    >
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2">
                                                 <Clock className="h-4 w-4 text-muted-foreground" />
-                                                <p className="font-medium">{entry.lesson.title}</p>
+                                                <p className="font-medium">
+                                                    {entry.lesson.title}
+                                                </p>
                                             </div>
                                             <p className="text-sm text-muted-foreground">
-                                                {entry.lesson.teacher} • {entry.lesson.location}
+                                                {entry.lesson.teacher} •{' '}
+                                                {entry.lesson.location}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
                                                 {entry.lesson.start_datetime}
                                             </p>
                                             <p className="mt-1 text-xs font-medium text-primary">
-                                                Position #{entry.position} • Joined {entry.joined_at}
+                                                Position #{entry.position} •
+                                                Joined {entry.joined_at}
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
-                                            <Button asChild variant="outline" size="sm">
-                                                <Link href={`/lessons/${entry.lesson.id}`}>View</Link>
+                                            <Button
+                                                asChild
+                                                variant="outline"
+                                                size="sm"
+                                            >
+                                                <Link
+                                                    href={`/lessons/${entry.lesson.id}`}
+                                                >
+                                                    View
+                                                </Link>
                                             </Button>
                                         </div>
                                     </div>
@@ -246,34 +327,54 @@ export default function AttendeeDashboard({ credit_balance, next_booking, recent
                 <Card>
                     <CardHeader>
                         <CardTitle>Recent Bookings</CardTitle>
-                        <CardDescription>Your latest class bookings</CardDescription>
+                        <CardDescription>
+                            Your latest class bookings
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
                             {recent_bookings.length > 0 ? (
                                 recent_bookings.map((booking) => (
-                                    <div key={booking.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                    <div
+                                        key={booking.id}
+                                        className="flex items-center justify-between border-b pb-4 last:border-0"
+                                    >
                                         <div className="flex-1">
-                                            <p className="font-medium">{booking.lesson.title}</p>
+                                            <p className="font-medium">
+                                                {booking.lesson.title}
+                                            </p>
                                             <p className="text-sm text-muted-foreground">
-                                                {booking.lesson.teacher} • {booking.lesson.location}
+                                                {booking.lesson.teacher} •{' '}
+                                                {booking.lesson.location}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
-                                                {booking.lesson.start_datetime} • {booking.credits_charged} credits
+                                                {booking.lesson.start_datetime}{' '}
+                                                • {booking.credits_charged}{' '}
+                                                credits
                                             </p>
                                         </div>
-                                        <span className={`rounded-full px-2 py-1 text-xs ${getStatusBadge(booking.status)}`}>
+                                        <span
+                                            className={`rounded-full px-2 py-1 text-xs ${getStatusBadge(booking.status)}`}
+                                        >
                                             {booking.status}
                                         </span>
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-center text-muted-foreground">No bookings yet. Start by browsing lessons!</p>
+                                <p className="text-center text-muted-foreground">
+                                    No bookings yet. Start by browsing lessons!
+                                </p>
                             )}
                         </div>
                         {recent_bookings.length > 0 && (
-                            <Button asChild variant="link" className="mt-4 w-full">
-                                <Link href={bookings.index().url}>View All Bookings</Link>
+                            <Button
+                                asChild
+                                variant="link"
+                                className="mt-4 w-full"
+                            >
+                                <Link href={bookings.index().url}>
+                                    View All Bookings
+                                </Link>
                             </Button>
                         )}
                     </CardContent>

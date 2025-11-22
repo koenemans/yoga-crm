@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import bookings from '@/routes/bookings';
 import lessons from '@/routes/lessons';
@@ -59,11 +65,16 @@ const statusColors = {
     booked: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
     attended: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
     no_show: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
-    cancelled_by_pupil: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
-    cancelled_by_admin: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
+    cancelled_by_pupil:
+        'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
+    cancelled_by_admin:
+        'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100',
 };
 
-export default function BookingsIndex({ bookings: bookingsData, credit_balance }: Props) {
+export default function BookingsIndex({
+    bookings: bookingsData,
+    credit_balance,
+}: Props) {
     const handleCancel = (bookingId: number) => {
         if (confirm('Are you sure you want to cancel this booking?')) {
             router.delete(`/bookings/${bookingId}`, {
@@ -85,9 +96,7 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                         </p>
                     </div>
                     <Button asChild>
-                        <Link href={lessons.index().url}>
-                            Browse Lessons
-                        </Link>
+                        <Link href={lessons.index().url}>Browse Lessons</Link>
                     </Button>
                 </div>
 
@@ -110,22 +119,30 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                             <CardHeader>
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                        <CardTitle className="text-xl">{booking.lesson.title}</CardTitle>
+                                        <CardTitle className="text-xl">
+                                            {booking.lesson.title}
+                                        </CardTitle>
                                         <CardDescription className="mt-1">
                                             {booking.lesson.teacher}
                                         </CardDescription>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${
-                                            statusColors[booking.status as keyof typeof statusColors]
-                                        }`}>
+                                        <span
+                                            className={`rounded-full px-3 py-1 text-xs font-medium ${
+                                                statusColors[
+                                                    booking.status as keyof typeof statusColors
+                                                ]
+                                            }`}
+                                        >
                                             {booking.status.replace(/_/g, ' ')}
                                         </span>
                                         {booking.can_cancel && (
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => handleCancel(booking.id)}
+                                                onClick={() =>
+                                                    handleCancel(booking.id)
+                                                }
                                                 title="Cancel booking"
                                             >
                                                 <X className="h-4 w-4" />
@@ -139,7 +156,9 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Calendar className="h-4 w-4" />
                                         <span>
-                                            {new Date(booking.lesson.start_datetime).toLocaleDateString('en-US', {
+                                            {new Date(
+                                                booking.lesson.start_datetime,
+                                            ).toLocaleDateString('en-US', {
                                                 weekday: 'short',
                                                 month: 'short',
                                                 day: 'numeric',
@@ -150,10 +169,16 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Clock className="h-4 w-4" />
                                         <span>
-                                            {new Date(booking.lesson.start_datetime).toLocaleTimeString('en-US', {
+                                            {new Date(
+                                                booking.lesson.start_datetime,
+                                            ).toLocaleTimeString('en-US', {
                                                 hour: '2-digit',
                                                 minute: '2-digit',
-                                            })} - {new Date(booking.lesson.end_datetime).toLocaleTimeString('en-US', {
+                                            })}{' '}
+                                            -{' '}
+                                            {new Date(
+                                                booking.lesson.end_datetime,
+                                            ).toLocaleTimeString('en-US', {
                                                 hour: '2-digit',
                                                 minute: '2-digit',
                                             })}
@@ -166,10 +191,16 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                                 </div>
                                 <div className="mt-3 flex items-center justify-between border-t pt-3">
                                     <span className="text-sm text-muted-foreground">
-                                        Credits charged: <span className="font-medium text-foreground">{booking.credits_charged}</span>
+                                        Credits charged:{' '}
+                                        <span className="font-medium text-foreground">
+                                            {booking.credits_charged}
+                                        </span>
                                     </span>
                                     <span className="text-sm text-muted-foreground">
-                                        Booked: {new Date(booking.booked_at).toLocaleDateString()}
+                                        Booked:{' '}
+                                        {new Date(
+                                            booking.booked_at,
+                                        ).toLocaleDateString()}
                                     </span>
                                 </div>
                             </CardContent>
@@ -181,10 +212,13 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                 {bookingsData.data.length === 0 && (
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
-                            <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-semibold mb-2">No Bookings Yet</h3>
-                            <p className="text-muted-foreground text-center mb-4">
-                                You haven't booked any classes yet. Browse available lessons to get started.
+                            <Calendar className="mb-4 h-12 w-12 text-muted-foreground" />
+                            <h3 className="mb-2 text-lg font-semibold">
+                                No Bookings Yet
+                            </h3>
+                            <p className="mb-4 text-center text-muted-foreground">
+                                You haven't booked any classes yet. Browse
+                                available lessons to get started.
                             </p>
                             <Button asChild>
                                 <Link href={lessons.index().url}>
@@ -207,9 +241,18 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                                 asChild={!!link.url}
                             >
                                 {link.url ? (
-                                    <Link href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <Link
+                                        href={link.url}
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 ) : (
-                                    <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 )}
                             </Button>
                         ))}

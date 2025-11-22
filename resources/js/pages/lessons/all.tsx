@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import lessons from '@/routes/lessons';
 import { type BreadcrumbItem, type PaginatedData } from '@/types';
@@ -56,7 +62,9 @@ export default function AllLessons({ lessons: lessonsData }: Props) {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold">All Lessons</h1>
-                        <p className="text-muted-foreground">View all upcoming lessons (read-only)</p>
+                        <p className="text-muted-foreground">
+                            View all upcoming lessons (read-only)
+                        </p>
                     </div>
                 </div>
 
@@ -64,7 +72,8 @@ export default function AllLessons({ lessons: lessonsData }: Props) {
                     <CardHeader>
                         <CardTitle>Upcoming Lessons</CardTitle>
                         <CardDescription>
-                            Showing {lessonsData.data.length} of {lessonsData.total} lessons
+                            Showing {lessonsData.data.length} of{' '}
+                            {lessonsData.total} lessons
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -77,26 +86,36 @@ export default function AllLessons({ lessons: lessonsData }: Props) {
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2">
                                             <Calendar className="h-4 w-4 text-muted-foreground" />
-                                            <h3 className="font-semibold">{lesson.title}</h3>
+                                            <h3 className="font-semibold">
+                                                {lesson.title}
+                                            </h3>
                                         </div>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {lesson.description}
                                         </p>
                                         <div className="mt-2 flex flex-wrap gap-4 text-sm">
                                             <span className="text-muted-foreground">
-                                                <strong>Teacher:</strong> {lesson.teacher.name}
+                                                <strong>Teacher:</strong>{' '}
+                                                {lesson.teacher.name}
                                             </span>
                                             <span className="text-muted-foreground">
-                                                <strong>Location:</strong> {lesson.location}
+                                                <strong>Location:</strong>{' '}
+                                                {lesson.location}
                                             </span>
                                             <span className="text-muted-foreground">
-                                                <strong>Time:</strong> {formatDate(lesson.start_datetime)}
+                                                <strong>Time:</strong>{' '}
+                                                {formatDate(
+                                                    lesson.start_datetime,
+                                                )}
                                             </span>
                                             <span className="text-muted-foreground">
-                                                <strong>Capacity:</strong> {lesson.bookings_count} / {lesson.capacity}
+                                                <strong>Capacity:</strong>{' '}
+                                                {lesson.bookings_count} /{' '}
+                                                {lesson.capacity}
                                             </span>
                                             <span className="text-muted-foreground">
-                                                <strong>Credits:</strong> {lesson.credits_required}
+                                                <strong>Credits:</strong>{' '}
+                                                {lesson.credits_required}
                                             </span>
                                         </div>
                                     </div>
@@ -117,14 +136,25 @@ export default function AllLessons({ lessons: lessonsData }: Props) {
                                     <Button
                                         key={index}
                                         asChild={!!link.url}
-                                        variant={link.active ? 'default' : 'outline'}
+                                        variant={
+                                            link.active ? 'default' : 'outline'
+                                        }
                                         size="sm"
                                         disabled={!link.url}
                                     >
                                         {link.url ? (
-                                            <Link href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                            <Link
+                                                href={link.url}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
+                                            />
                                         ) : (
-                                            <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: link.label,
+                                                }}
+                                            />
                                         )}
                                     </Button>
                                 ))}

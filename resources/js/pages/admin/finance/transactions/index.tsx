@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
 import { type BreadcrumbItem, type PaginatedData } from '@/types';
@@ -51,7 +57,9 @@ export default function TransactionsIndex({ transactions, summary }: Props) {
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
                     <h1 className="text-3xl font-bold">Credit Transactions</h1>
-                    <p className="text-muted-foreground">View all credit transactions</p>
+                    <p className="text-muted-foreground">
+                        View all credit transactions
+                    </p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
@@ -60,7 +68,9 @@ export default function TransactionsIndex({ transactions, summary }: Props) {
                             <CardTitle>Credits Issued</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.total_credits_issued}</div>
+                            <div className="text-2xl font-bold">
+                                {summary.total_credits_issued}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -68,7 +78,9 @@ export default function TransactionsIndex({ transactions, summary }: Props) {
                             <CardTitle>Credits Used</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.total_credits_used}</div>
+                            <div className="text-2xl font-bold">
+                                {summary.total_credits_used}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -76,7 +88,9 @@ export default function TransactionsIndex({ transactions, summary }: Props) {
                             <CardTitle>Expired Credits</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.expired_credits}</div>
+                            <div className="text-2xl font-bold">
+                                {summary.expired_credits}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -84,22 +98,39 @@ export default function TransactionsIndex({ transactions, summary }: Props) {
                 <Card>
                     <CardHeader>
                         <CardTitle>Transaction History</CardTitle>
-                        <CardDescription>Showing {transactions.data.length} of {transactions.total} transactions</CardDescription>
+                        <CardDescription>
+                            Showing {transactions.data.length} of{' '}
+                            {transactions.total} transactions
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
                             {transactions.data.map((transaction) => (
-                                <div key={transaction.id} className="flex items-center justify-between border-b pb-4 last:border-0">
+                                <div
+                                    key={transaction.id}
+                                    className="flex items-center justify-between border-b pb-4 last:border-0"
+                                >
                                     <div className="flex-1">
-                                        <p className="font-medium">{transaction.user.name}</p>
-                                        <p className="text-sm text-muted-foreground">{transaction.description}</p>
-                                        <p className="text-xs text-muted-foreground">{transaction.created_at}</p>
+                                        <p className="font-medium">
+                                            {transaction.user.name}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                            {transaction.description}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {transaction.created_at}
+                                        </p>
                                     </div>
                                     <div className="text-right">
-                                        <span className={`text-lg font-bold ${
-                                            transaction.credits > 0 ? 'text-green-600' : 'text-red-600'
-                                        }`}>
-                                            {transaction.credits > 0 ? '+' : ''}{transaction.credits}
+                                        <span
+                                            className={`text-lg font-bold ${
+                                                transaction.credits > 0
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
+                                            }`}
+                                        >
+                                            {transaction.credits > 0 ? '+' : ''}
+                                            {transaction.credits}
                                         </span>
                                     </div>
                                 </div>

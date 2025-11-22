@@ -21,11 +21,26 @@ interface User {
     created_at: string;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     users: {
         data: User[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     filters: {
         role?: string;
@@ -179,7 +194,7 @@ export default function UsersIndex({ users, filters }: Props) {
                 {/* Pagination */}
                 {users.links && users.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {users.links.map((link: any, index: number) => (
+                        {users.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}

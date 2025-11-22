@@ -29,12 +29,18 @@ interface ExpiringCredit {
     credits: number;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
 interface Props {
     packages: CreditPackage[];
     balance: number;
     transactions: {
         data: Transaction[];
-        links: any[];
+        links: PaginationLink[];
     };
     expiring_credits: ExpiringCredit[];
 }

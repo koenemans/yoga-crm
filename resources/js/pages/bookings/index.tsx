@@ -24,11 +24,26 @@ interface Booking {
     can_cancel: boolean;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     bookings: {
         data: Booking[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     credit_balance: number;
 }
@@ -183,7 +198,7 @@ export default function BookingsIndex({ bookings: bookingsData, credit_balance }
                 {/* Pagination */}
                 {bookingsData.links && bookingsData.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {bookingsData.links.map((link: any, index: number) => (
+                        {bookingsData.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}

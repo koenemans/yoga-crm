@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import bookings from '@/routes/bookings';
 import lessons from '@/routes/lessons';
@@ -8,7 +7,6 @@ import waitlist from '@/routes/waitlist';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Calendar, Clock, MapPin, PlusCircle, Users } from 'lucide-react';
-import { useState } from 'react';
 
 interface Lesson {
     id: number;
@@ -31,11 +29,26 @@ interface Lesson {
     user_on_waitlist: boolean;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     lessons: {
         data: Lesson[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     user_credit_balance: number;
 }
@@ -50,7 +63,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function LessonsIndex({ lessons: lessonsData, user_credit_balance }: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const user = auth.user;
-    const [search, setSearch] = useState('');
 
     const handleBook = (lessonId: number) => {
         router.post(bookings.store().url, { lesson_id: lessonId }, {
@@ -64,7 +76,7 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
         });
     };
 
-    const canBook = user.role === 'pupil' || user.role === 'admin';
+    const canBook = user.role === 'attendee' || user.role === 'admin';
     const canCreate = user.role === 'admin' || user.role === 'teacher';
 
     return (
@@ -89,8 +101,8 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                     )}
                 </div>
 
-                {/* Credit Balance for Pupils */}
-                {user.role === 'pupil' && (
+                {/* Credit Balance for Attendees */}
+                {user.role === 'attendee' && (
                     <Card className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
                         <CardHeader className="pb-3">
                             <CardTitle className="text-blue-900 dark:text-blue-100">
@@ -231,7 +243,7 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                 {/* Pagination */}
                 {lessonsData.links && lessonsData.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {lessonsData.links.map((link: any, index: number) => (
+                        {lessonsData.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}

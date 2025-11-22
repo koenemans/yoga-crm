@@ -25,11 +25,26 @@ interface Purchase {
     paid_at: string | null;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     purchases: {
         data: Purchase[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     filters: {
         status?: string;
@@ -219,7 +234,7 @@ export default function PurchasesIndex({ purchases, filters }: Props) {
                 {/* Pagination */}
                 {purchases.links && purchases.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {purchases.links.map((link: any, index: number) => (
+                        {purchases.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}

@@ -5,13 +5,6 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { BarChart3, FileText, TrendingUp } from 'lucide-react';
 
-interface Props {
-    filters: {
-        date_from: string;
-        date_to: string;
-    };
-}
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Finance',
@@ -23,7 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ReportsIndex({ filters }: Props) {
+export default function ReportsIndex() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Financial Reports" />

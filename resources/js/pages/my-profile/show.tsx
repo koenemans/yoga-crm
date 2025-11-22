@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CreditCard, Edit, History, User as UserIcon } from 'lucide-react';
+import { CreditCard, Edit, History } from 'lucide-react';
 
 interface Props {
     credit_balance: number;

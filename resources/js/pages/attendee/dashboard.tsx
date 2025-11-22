@@ -6,7 +6,7 @@ import credits from '@/routes/credits';
 import lessons from '@/routes/lessons';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Calendar, Clock, CreditCard, History, ShoppingCart, TrendingUp, X } from 'lucide-react';
+import { Calendar, Clock, CreditCard, History, ShoppingCart, TrendingUp } from 'lucide-react';
 
 interface NextBooking {
     id: number;

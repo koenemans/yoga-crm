@@ -7,8 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, router } from '@inertiajs/react';
-import { ArrowLeft, CreditCard, Edit, History, User as UserIcon } from 'lucide-react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, CreditCard, Edit } from 'lucide-react';
 import { useState } from 'react';
 
 interface UserData {

@@ -7,7 +7,7 @@ import lessons from '@/routes/lessons';
 import waitlist from '@/routes/waitlist';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { ArrowLeft, Calendar, Clock, CreditCard, Edit, MapPin, Trash2, Users, X } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, CreditCard, Edit, MapPin, Trash2, Users } from 'lucide-react';
 
 interface LessonData {
     id: number;
@@ -86,7 +86,6 @@ export default function LessonShow({ lesson, user_credit_balance, user_booked, u
         }
     };
 
-    const canBook = (user.role === 'attendee' || user.role === 'admin') && !user_booked;
     const hasEnoughCredits = user_credit_balance >= lesson.credits_required;
 
     return (

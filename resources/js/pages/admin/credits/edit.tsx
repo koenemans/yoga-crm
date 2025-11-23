@@ -34,7 +34,7 @@ export default function EditCreditPackage({ package: pkg }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Admin', href: admin.lessons.index().url },
         { title: 'Credits', href: admin.credits.index().url },
-        { title: pkg.name, href: `/admin/credit-packages/${pkg.id}/edit` },
+        { title: pkg.name, href: admin.credits.edit(pkg.id).url },
     ];
 
     const { data, setData, put, processing, errors } = useForm({
@@ -49,7 +49,7 @@ export default function EditCreditPackage({ package: pkg }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(`/admin/credit-packages/${pkg.id}`);
+        put(admin.credits.update(pkg.id).url);
     };
 
     return (

@@ -48,7 +48,7 @@ class CreditPackageController extends Controller
 
         CreditPackage::create($validated);
 
-        return redirect()->route('admin.credit-packages.index')
+        return redirect()->route('admin.credits.index')
             ->with('success', 'Credit package created successfully.');
     }
 
@@ -79,7 +79,7 @@ class CreditPackageController extends Controller
 
         $creditPackage->update($validated);
 
-        return redirect()->route('admin.credit-packages.index')
+        return redirect()->route('admin.credits.index')
             ->with('success', 'Credit package updated successfully.');
     }
 
@@ -90,7 +90,7 @@ class CreditPackageController extends Controller
     {
         $creditPackage->delete();
 
-        return redirect()->route('admin.credit-packages.index')
+        return redirect()->route('admin.credits.index')
             ->with('success', 'Credit package deleted successfully.');
     }
 }

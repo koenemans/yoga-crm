@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accountant;
+namespace App\Http\Controllers\Admin\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Models\CreditTransaction;
@@ -97,7 +97,7 @@ class TransactionController extends Controller
             ->where('credits', '>', 0)
             ->sum('credits');
 
-        return Inertia::render('accountant/transactions/index', [
+        return Inertia::render('admin/finance/transactions/index', [
             'transactions' => $transactions,
             'filters' => $request->only(['type', 'user_id', 'date_from', 'date_to', 'search', 'status']),
             'summary' => [

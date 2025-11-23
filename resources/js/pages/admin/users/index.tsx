@@ -1,8 +1,14 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import admin from '@/routes/admin';
 import { type BreadcrumbItem } from '@/types';
@@ -21,11 +27,26 @@ interface User {
     created_at: string;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     users: {
         data: User[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     filters: {
         role?: string;
@@ -36,7 +57,7 @@ interface Props {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Admin',
-        href: admin.dashboard().url,
+        href: admin.lessons.index().url,
     },
     {
         title: 'Users',
@@ -47,8 +68,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 const roleColors = {
     admin: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100',
     teacher: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
-    pupil: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
-    accountant: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100',
+    attendee:
+        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
 };
 
 export default function UsersIndex({ users, filters }: Props) {
@@ -59,11 +80,16 @@ export default function UsersIndex({ users, filters }: Props) {
         const params = new URLSearchParams();
         if (search) params.set('search', search);
         if (role && role !== 'all') params.set('role', role);
-        
-        router.get(admin.users.index().url + (params.toString() ? `?${params.toString()}` : ''), {}, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+
+        router.get(
+            admin.users.index().url +
+                (params.toString() ? `?${params.toString()}` : ''),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     return (
@@ -92,12 +118,16 @@ export default function UsersIndex({ users, filters }: Props) {
                         <div className="flex gap-4">
                             <div className="flex-1">
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         placeholder="Search by name or email..."
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleFilter()}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
+                                        onKeyDown={(e) =>
+                                            e.key === 'Enter' && handleFilter()
+                                        }
                                         className="pl-10"
                                     />
                                 </div>
@@ -107,11 +137,16 @@ export default function UsersIndex({ users, filters }: Props) {
                                     <SelectValue placeholder="All Roles" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Roles</SelectItem>
+                                    <SelectItem value="all">
+                                        All Roles
+                                    </SelectItem>
                                     <SelectItem value="admin">Admin</SelectItem>
-                                    <SelectItem value="teacher">Teacher</SelectItem>
-                                    <SelectItem value="pupil">Pupil</SelectItem>
-                                    <SelectItem value="accountant">Accountant</SelectItem>
+                                    <SelectItem value="teacher">
+                                        Teacher
+                                    </SelectItem>
+                                    <SelectItem value="attendee">
+                                        Attendee
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleFilter}>Filter</Button>
@@ -126,26 +161,51 @@ export default function UsersIndex({ users, filters }: Props) {
                             <table className="w-full">
                                 <thead className="border-b bg-muted/50">
                                     <tr>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Name</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Email</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Role</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Phone</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Credits</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium">Status</th>
-                                        <th className="px-4 py-3 text-right text-sm font-medium">Actions</th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Name
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Email
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Role
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Phone
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Credits
+                                        </th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium">
+                                            Status
+                                        </th>
+                                        <th className="px-4 py-3 text-right text-sm font-medium">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y">
                                     {users.data.map((user) => (
-                                        <tr key={user.id} className="hover:bg-muted/50">
+                                        <tr
+                                            key={user.id}
+                                            className="hover:bg-muted/50"
+                                        >
                                             <td className="px-4 py-3">
-                                                <p className="font-medium">{user.name}</p>
+                                                <p className="font-medium">
+                                                    {user.name}
+                                                </p>
                                             </td>
                                             <td className="px-4 py-3 text-sm text-muted-foreground">
                                                 {user.email}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <Badge className={roleColors[user.role as keyof typeof roleColors]}>
+                                                <Badge
+                                                    className={
+                                                        roleColors[
+                                                            user.role as keyof typeof roleColors
+                                                        ]
+                                                    }
+                                                >
                                                     {user.role}
                                                 </Badge>
                                             </td>
@@ -153,20 +213,46 @@ export default function UsersIndex({ users, filters }: Props) {
                                                 {user.phone || '-'}
                                             </td>
                                             <td className="px-4 py-3 text-sm">
-                                                {user.credit_balance !== null ? user.credit_balance : '-'}
+                                                {user.credit_balance !== null
+                                                    ? user.credit_balance
+                                                    : '-'}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <Badge variant={user.is_active ? 'default' : 'secondary'}>
-                                                    {user.is_active ? 'Active' : 'Inactive'}
+                                                <Badge
+                                                    variant={
+                                                        user.is_active
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    }
+                                                >
+                                                    {user.is_active
+                                                        ? 'Active'
+                                                        : 'Inactive'}
                                                 </Badge>
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-2">
-                                                    <Button asChild variant="ghost" size="sm">
-                                                        <Link href={`/admin/users/${user.id}`}>View</Link>
+                                                    <Button
+                                                        asChild
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <Link
+                                                            href={`/admin/users/${user.id}`}
+                                                        >
+                                                            View
+                                                        </Link>
                                                     </Button>
-                                                    <Button asChild variant="ghost" size="sm">
-                                                        <Link href={`/admin/users/${user.id}/edit`}>Edit</Link>
+                                                    <Button
+                                                        asChild
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <Link
+                                                            href={`/admin/users/${user.id}/edit`}
+                                                        >
+                                                            Edit
+                                                        </Link>
                                                     </Button>
                                                 </div>
                                             </td>
@@ -181,7 +267,7 @@ export default function UsersIndex({ users, filters }: Props) {
                 {/* Pagination */}
                 {users.links && users.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {users.links.map((link: any, index: number) => (
+                        {users.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}
@@ -190,9 +276,18 @@ export default function UsersIndex({ users, filters }: Props) {
                                 asChild={!!link.url}
                             >
                                 {link.url ? (
-                                    <Link href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <Link
+                                        href={link.url}
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 ) : (
-                                    <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 )}
                             </Button>
                         ))}

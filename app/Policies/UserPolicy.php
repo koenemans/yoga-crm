@@ -13,7 +13,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin() || $user->isTeacher() || $user->isAccountant();
+        return $user->isAdmin() || $user->isTeacher();
     }
 
     /**
@@ -23,8 +23,7 @@ class UserPolicy
     {
         return $user->isAdmin() 
             || $user->id === $model->id 
-            || $user->isTeacher() 
-            || $user->isAccountant();
+            || $user->isTeacher();
     }
 
     /**

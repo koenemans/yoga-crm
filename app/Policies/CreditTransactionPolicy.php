@@ -14,7 +14,7 @@ class CreditTransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isAdmin() || $user->isAccountant() || $user->isTeacher();
+        return $user->isAdmin() || $user->isTeacher();
     }
 
     /**
@@ -23,7 +23,6 @@ class CreditTransactionPolicy
     public function view(User $user, CreditTransaction $transaction): bool
     {
         return $user->isAdmin() 
-            || $user->isAccountant()
             || $user->isTeacher()
             || $user->id === $transaction->user_id;
     }
@@ -57,6 +56,6 @@ class CreditTransactionPolicy
      */
     public function export(User $user): bool
     {
-        return $user->isAdmin() || $user->isAccountant();
+        return $user->isAdmin();
     }
 }

@@ -92,20 +92,21 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a pupil.
+     * Check if user is an attendee (formerly pupil).
      */
-    public function isPupil(): bool
+    public function isAttendee(): bool
     {
-        return $this->role === 'pupil';
+        return $this->role === 'attendee';
     }
 
     /**
-     * Check if user is an accountant.
+     * Check if user is a pupil (alias for isAttendee for backward compatibility).
      */
-    public function isAccountant(): bool
+    public function isPupil(): bool
     {
-        return $this->role === 'accountant';
+        return $this->isAttendee();
     }
+
 
     /**
      * Get lessons taught by this teacher.

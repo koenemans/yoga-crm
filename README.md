@@ -1,299 +1,186 @@
 # Yoga CRM
 
-A comprehensive Customer Relationship Management system for yoga schools, built with Laravel 11 and React.
+A complete management system designed specifically for yoga schools and studios. This application helps you manage your classes, students, teachers, bookings, and finances all in one place.
 
-## Features
+## What Does This System Do?
 
-### Core Functionality
-- **User Management** - 4 roles (Admin, Teacher, Pupil, Accountant) with role-based permissions
-- **Lesson Management** - Create, update, cancel lessons with teacher assignment
-- **Booking System** - Book lessons, cancel with refund policy, attendance tracking
-- **Waitlist System** - Automatic promotion when spots become available
-- **Credit System** - Packages, purchases, transactions, expiry tracking
-- **Financial Reporting** - Accountant dashboard with revenue analytics and CSV exports
-- **Notifications** - Email notifications for bookings, cancellations, promotions
+### For Yoga School Owners (Admins)
+- **Manage Everything** - Complete control over your yoga school operations
+- **Track Finances** - See revenue, pending payments, and export financial reports
+- **Manage Staff & Students** - Add teachers and students, adjust their credits
+- **Oversee All Classes** - View and manage all lessons across all teachers
+- **Monitor Performance** - Dashboard with key metrics and month-over-month comparisons
 
-### Tech Stack
-- **Backend:** Laravel 11, PHP 8.1+
-- **Frontend:** React 18, TypeScript, Inertia.js
-- **Styling:** TailwindCSS, shadcn/ui components
-- **Database:** MySQL/PostgreSQL (SQLite for development)
-- **Build:** Vite
+### For Yoga Teachers
+- **Personal Dashboard** - See your teaching statistics and upcoming classes
+- **Schedule Classes** - Create and manage your own yoga lessons
+- **Track Students** - View who's attending your classes and mark attendance
+- **Monitor Bookings** - See how many students have booked each class
+- **View All Schedules** - See what other teachers are teaching (read-only)
 
-## Installation
+### For Students (Attendees)
+- **Personal Dashboard** - See your credit balance, upcoming classes, and stats
+- **Browse Classes** - Find and book yoga lessons that fit your schedule
+- **Manage Bookings** - View your booking history and cancel if needed
+- **Buy Credits** - Purchase credit packages to book classes
+- **Join Waitlists** - Get notified when a full class has an opening
+- **Track Progress** - See how many classes you've attended
+
+## Key Features
+
+### Smart Booking System
+- Students book classes using credits
+- Automatic waitlist when classes are full
+- Cancellation with refund policy (within 24 hours)
+- Email notifications for bookings and cancellations
+- Automatic promotion from waitlist when spots open
+
+### Flexible Credit System
+- Pre-purchase credits in packages
+- Credits have expiry dates to encourage regular attendance
+- Manual credit adjustments by admin when needed
+- Complete transaction history for transparency
+
+### Financial Management
+- Track all purchases and payments
+- Confirm pending payments manually
+- Generate revenue reports
+- Export data to spreadsheets (CSV)
+- Month-over-month revenue comparison
+
+### User-Friendly Design
+- Clean, modern interface
+- Mobile-responsive design
+- Intuitive navigation for each role
+- Real-time updates and notifications
+
+## How It Works
+
+### Three User Types
+
+**1. Students (Attendees)**
+- Create an account and purchase credits
+- Browse available yoga classes
+- Book classes using credits
+- Receive email confirmations
+- Cancel bookings (get refund if within 24 hours)
+- Join waitlist if class is full
+- Track attendance history
+
+**2. Teachers**
+- Create and schedule yoga classes
+- Set class capacity and credit requirements
+- View student bookings
+- Mark attendance after class
+- See teaching statistics
+- Cancel classes if needed (students get automatic refunds)
+
+**3. Administrators**
+- Manage all users (teachers and students)
+- Create credit packages with pricing
+- Confirm pending payments
+- View financial reports and analytics
+- Manage all classes across all teachers
+- Export data for accounting
+
+### Booking Process
+
+1. **Student browses classes** - See all upcoming yoga lessons with details (teacher, time, location, capacity)
+2. **Student books a class** - System checks if they have enough credits and if space is available
+3. **Credits are deducted** - Booking is confirmed and email notification is sent
+4. **If class is full** - Student can join the waitlist
+5. **When someone cancels** - First person on waitlist is automatically promoted and notified
+
+### Credit System
+
+- Students purchase credits in packages (e.g., 10 credits for €100)
+- Each class requires a certain number of credits (set by teacher/admin)
+- Credits have expiry dates to encourage regular attendance
+- All credit transactions are tracked for transparency
+- Admins can manually adjust credits when needed
+
+### Cancellation Policy
+
+- Students can cancel bookings
+- **Within 24 hours of class:** Full credit refund
+- **Less than 24 hours:** No refund
+- When a booking is cancelled, the first person on the waitlist is automatically promoted
+
+---
+
+## Quick Start for Developers
 
 ### Prerequisites
-- PHP 8.1 or higher
+- PHP 8.1+
 - Composer
-- Node.js 18+ and npm
-- MySQL/PostgreSQL (or SQLite for development)
+- Node.js 18+
+- MySQL/PostgreSQL (or SQLite for testing)
 
-### Setup
+### Installation
 
-1. **Clone the repository**
+1. Clone and install dependencies:
 ```bash
 git clone <repository-url>
 cd yoga-crm
-```
-
-2. **Install dependencies**
-```bash
 composer install
 npm install
 ```
 
-3. **Configure environment**
+2. Configure environment:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. **Configure database**
-Edit `.env` and set your database credentials:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=yoga_crm
-DB_USERNAME=root
-DB_PASSWORD=
-```
+3. Set up database (edit .env file with your database credentials)
 
-Or use SQLite for development:
-```env
-DB_CONNECTION=sqlite
-```
-
-5. **Run migrations and seed database**
+4. Run migrations and seed test data:
 ```bash
 php artisan migrate
 php artisan db:seed --class=YogaCrmSeeder
 ```
 
-6. **Build assets**
-```bash
-npm run build
-```
-
-7. **Start development server**
+5. Start development server:
 ```bash
 composer run dev
 ```
 
-This will start:
-- PHP development server (http://localhost:8000)
-- Queue worker
-- Vite dev server
+Visit http://localhost:8000
 
-## Test Accounts
+### Test Accounts
 
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@yoga.test | password |
 | Teacher | teacher@yoga.test | password |
-| Pupil | pupil@yoga.test | password |
-| Accountant | accountant@yoga.test | password |
+| Student | attendee@yoga.test | password |
 
-## User Roles
+### Technology Stack
 
-### Pupil
-- Browse and book lessons
-- View booking history
-- Purchase credit packages
-- Manage profile
-- Cancel bookings (with refund if within cutoff time)
+- **Backend:** Laravel 11 (PHP framework)
+- **Frontend:** React 18 with TypeScript
+- **Styling:** TailwindCSS with shadcn/ui components
+- **Database:** MySQL, PostgreSQL, or SQLite
+- **Email:** Configurable SMTP
 
-### Teacher
-- All pupil features
-- Create and manage lessons
-- View student list
-- Mark attendance
-- Cancel own lessons
+---
 
-### Admin
-- All features
-- User management (CRUD)
-- Credit package management
-- Confirm pending purchases
-- Adjust user credits manually
-- Cancel any lesson
-- View admin dashboard
+## Security & Privacy
 
-### Accountant
-- View financial dashboard with revenue metrics
-- View all purchases (read-only)
-- View all transactions (read-only)
-- Generate financial reports
-- Export data to CSV
-- Month-over-month revenue comparison
+- All passwords are securely encrypted
+- Role-based access control (users only see what they're allowed to)
+- Protection against common web vulnerabilities
+- Optional two-factor authentication
+- Email verification for new accounts
+- Secure payment confirmation workflow
 
-## Key Business Logic
+## Support & Customization
 
-### Booking Flow
-1. User selects lesson → checks credits & capacity
-2. Deducts credits → creates booking → sends confirmation
-3. If full → can join waitlist
+This system is designed to be flexible and can be customized for your specific yoga school needs:
+- Adjust credit packages and pricing
+- Modify cancellation policies
+- Customize email notifications
+- Add custom fields to user profiles
+- Configure class types and categories
 
-### Cancellation Flow
-1. User cancels → checks cutoff time (default 24h)
-2. Before cutoff → refunds credits
-3. After cutoff → no refund
-4. Promotes first waitlist entry if available
-
-### Credit System
-- Credits purchased via packages or manual adjustment
-- Credits have expiry dates
-- Expired credits cannot be used
-- Transaction history tracks all credit movements
-
-### Waitlist System
-- Automatic promotion when booking cancelled
-- Email notification sent to promoted user
-- FIFO (First In, First Out) order
-
-## Database Schema
-
-### Core Tables
-- `users` - User accounts with roles and profiles
-- `lessons` - Lesson schedule
-- `lesson_series` - Recurring lesson templates
-- `bookings` - Lesson bookings
-- `waitlist_entries` - Waitlist for full lessons
-- `credit_packages` - Available credit packages
-- `credit_purchases` - Purchase history
-- `credit_transactions` - Credit movement audit trail
-- `settings` - System configuration
-
-## API Routes
-
-### Public Routes
-- `POST /login` - User login
-- `POST /register` - User registration
-- `POST /forgot-password` - Password reset request
-- `POST /reset-password` - Password reset
-
-### Authenticated Routes
-
-#### Lessons
-- `GET /lessons` - List lessons
-- `GET /lessons/{id}` - View lesson details
-- `POST /lessons` - Create lesson (Teacher/Admin)
-- `PUT /lessons/{id}` - Update lesson (Teacher/Admin)
-- `DELETE /lessons/{id}` - Delete lesson (Teacher/Admin)
-- `POST /lessons/{id}/cancel` - Cancel lesson (Admin)
-
-#### Bookings
-- `GET /bookings` - List my bookings
-- `POST /bookings` - Book a lesson
-- `DELETE /bookings/{id}` - Cancel booking
-- `POST /bookings/{id}/attendance` - Mark attendance (Teacher/Admin)
-
-#### Credits
-- `GET /credits` - View credit balance
-- `POST /credits/purchase` - Purchase credits
-- `GET /credits/purchase/{id}` - View purchase details
-
-#### Admin
-- `GET /admin/dashboard` - Admin dashboard
-- `GET /admin/users` - List users
-- `POST /admin/users` - Create user
-- `GET /admin/users/{id}` - View user
-- `PUT /admin/users/{id}` - Update user
-- `DELETE /admin/users/{id}` - Delete user
-- `POST /admin/users/{id}/credits` - Adjust credits
-- `GET /admin/credit-packages` - List packages
-- `POST /admin/credit-packages` - Create package
-- `PUT /admin/credit-packages/{id}` - Update package
-- `DELETE /admin/credit-packages/{id}` - Delete package
-- `GET /admin/purchases` - List purchases
-- `POST /admin/purchases/{id}/confirm` - Confirm payment
-
-#### Accountant
-- `GET /accountant/dashboard` - Financial dashboard
-- `GET /accountant/purchases` - List purchases (read-only)
-- `GET /accountant/purchases/{id}` - View purchase details
-- `GET /accountant/transactions` - List transactions (read-only)
-- `GET /accountant/reports` - Reports page
-- `GET /accountant/reports/revenue` - Revenue analytics
-- `GET /accountant/reports/export/purchases` - Export purchases CSV
-- `GET /accountant/reports/export/transactions` - Export transactions CSV
-
-## Development
-
-### Running Tests
-```bash
-php artisan test
-```
-
-### Code Style
-```bash
-# PHP
-./vendor/bin/pint
-
-# JavaScript/TypeScript
-npm run lint
-```
-
-### Building for Production
-```bash
-npm run build
-php artisan optimize
-```
-
-## Configuration
-
-### Email Notifications
-Configure email settings in `.env`:
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
-### Queue Configuration
-For production, use a proper queue driver:
-```env
-QUEUE_CONNECTION=redis
-```
-
-Then run the queue worker:
-```bash
-php artisan queue:work
-```
-
-### Scheduled Tasks
-Add to crontab for credit expiry checks:
-```bash
-* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
-```
-
-## Database Compatibility
-
-The application supports multiple database drivers:
-- **MySQL/MariaDB** (recommended for production)
-- **PostgreSQL**
-- **SQLite** (for development)
-
-Date formatting queries automatically adapt to the configured database driver via the `DatabaseHelper` class.
-
-## Security
-
-- CSRF protection enabled
-- Password hashing with bcrypt
-- Role-based authorization via policies
-- Email verification available
-- Two-factor authentication available
-- SQL injection protection via Eloquent ORM
-
-## License
-
-[Your License Here]
-
-## Support
-
-For issues or questions, please open an issue on GitHub.
+For technical support or questions, please contact your system administrator.

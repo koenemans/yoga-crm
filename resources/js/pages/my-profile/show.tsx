@@ -1,10 +1,16 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CreditCard, Edit, History, User as UserIcon } from 'lucide-react';
+import { CreditCard, Edit, History } from 'lucide-react';
 
 interface Props {
     credit_balance: number;
@@ -25,7 +31,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function MyProfileShow({ credit_balance, total_bookings, upcoming_bookings, recent_transactions }: Props) {
+export default function MyProfileShow({
+    credit_balance,
+    total_bookings,
+    upcoming_bookings,
+    recent_transactions,
+}: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const user = auth.user;
 
@@ -37,7 +48,7 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                 <div className="flex items-start justify-between">
                     <div>
                         <h1 className="text-3xl font-bold">My Profile</h1>
-                        <p className="text-muted-foreground mt-1">
+                        <p className="mt-1 text-muted-foreground">
                             Manage your personal information
                         </p>
                     </div>
@@ -51,7 +62,7 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
 
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Main Content */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-6 lg:col-span-2">
                         {/* Personal Information */}
                         <Card>
                             <CardHeader>
@@ -59,36 +70,66 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                             </CardHeader>
                             <CardContent className="grid gap-4 md:grid-cols-2">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">First Name</p>
-                                    <p className="font-medium">{user.first_name || '-'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Last Name</p>
-                                    <p className="font-medium">{user.last_name || '-'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Email</p>
-                                    <p className="font-medium">{user.email}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Phone</p>
-                                    <p className="font-medium">{user.phone || '-'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Language</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        First Name
+                                    </p>
                                     <p className="font-medium">
-                                        {user.preferred_language === 'nl' ? 'Dutch' : 'English'}
+                                        {user.first_name || '-'}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Status</p>
-                                    <Badge variant={user.is_active ? 'default' : 'secondary'}>
+                                    <p className="text-sm text-muted-foreground">
+                                        Last Name
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.last_name || '-'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">
+                                        Email
+                                    </p>
+                                    <p className="font-medium">{user.email}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">
+                                        Phone
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.phone || '-'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">
+                                        Language
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.preferred_language === 'nl'
+                                            ? 'Dutch'
+                                            : 'English'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">
+                                        Status
+                                    </p>
+                                    <Badge
+                                        variant={
+                                            user.is_active
+                                                ? 'default'
+                                                : 'secondary'
+                                        }
+                                    >
                                         {user.is_active ? 'Active' : 'Inactive'}
                                     </Badge>
                                 </div>
                                 <div className="md:col-span-2">
-                                    <p className="text-sm text-muted-foreground">Address</p>
-                                    <p className="font-medium">{user.address || '-'}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Address
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.address || '-'}
+                                    </p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -103,12 +144,20 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                             </CardHeader>
                             <CardContent className="grid gap-4 md:grid-cols-2">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Contact Name</p>
-                                    <p className="font-medium">{user.emergency_contact || '-'}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Contact Name
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.emergency_contact || '-'}
+                                    </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Contact Phone</p>
-                                    <p className="font-medium">{user.emergency_contact_phone || '-'}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Contact Phone
+                                    </p>
+                                    <p className="font-medium">
+                                        {user.emergency_contact_phone || '-'}
+                                    </p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -119,31 +168,60 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <CardTitle>Recent Transactions</CardTitle>
-                                            <CardDescription>Your latest credit activity</CardDescription>
+                                            <CardTitle>
+                                                Recent Transactions
+                                            </CardTitle>
+                                            <CardDescription>
+                                                Your latest credit activity
+                                            </CardDescription>
                                         </div>
-                                        <Button asChild variant="outline" size="sm">
-                                            <Link href="/credits">View All</Link>
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            size="sm"
+                                        >
+                                            <Link href="/credits">
+                                                View All
+                                            </Link>
                                         </Button>
                                     </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-3">
-                                        {recent_transactions.map((transaction) => (
-                                            <div key={transaction.id} className="flex items-center justify-between border-b pb-3 last:border-0">
-                                                <div className="flex-1">
-                                                    <p className="text-sm font-medium">{transaction.description}</p>
-                                                    <p className="text-xs text-muted-foreground">
-                                                        {new Date(transaction.created_at).toLocaleDateString()}
-                                                    </p>
+                                        {recent_transactions.map(
+                                            (transaction) => (
+                                                <div
+                                                    key={transaction.id}
+                                                    className="flex items-center justify-between border-b pb-3 last:border-0"
+                                                >
+                                                    <div className="flex-1">
+                                                        <p className="text-sm font-medium">
+                                                            {
+                                                                transaction.description
+                                                            }
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            {new Date(
+                                                                transaction.created_at,
+                                                            ).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        className={`text-sm font-bold ${
+                                                            transaction.credits >
+                                                            0
+                                                                ? 'text-green-600'
+                                                                : 'text-red-600'
+                                                        }`}
+                                                    >
+                                                        {transaction.credits > 0
+                                                            ? '+'
+                                                            : ''}
+                                                        {transaction.credits}
+                                                    </div>
                                                 </div>
-                                                <div className={`text-sm font-bold ${
-                                                    transaction.credits > 0 ? 'text-green-600' : 'text-red-600'
-                                                }`}>
-                                                    {transaction.credits > 0 ? '+' : ''}{transaction.credits}
-                                                </div>
-                                            </div>
-                                        ))}
+                                            ),
+                                        )}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -161,9 +239,13 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-4xl font-bold mb-4">{credit_balance}</div>
+                                <div className="mb-4 text-4xl font-bold">
+                                    {credit_balance}
+                                </div>
                                 <Button asChild className="w-full">
-                                    <Link href="/credits">Purchase Credits</Link>
+                                    <Link href="/credits">
+                                        Purchase Credits
+                                    </Link>
                                 </Button>
                             </CardContent>
                         </Card>
@@ -178,14 +260,26 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Total Bookings</p>
-                                    <p className="text-2xl font-bold">{total_bookings}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Total Bookings
+                                    </p>
+                                    <p className="text-2xl font-bold">
+                                        {total_bookings}
+                                    </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Upcoming Classes</p>
-                                    <p className="text-2xl font-bold">{upcoming_bookings}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Upcoming Classes
+                                    </p>
+                                    <p className="text-2xl font-bold">
+                                        {upcoming_bookings}
+                                    </p>
                                 </div>
-                                <Button asChild variant="outline" className="w-full">
+                                <Button
+                                    asChild
+                                    variant="outline"
+                                    className="w-full"
+                                >
                                     <Link href="/bookings">View Bookings</Link>
                                 </Button>
                             </CardContent>
@@ -198,13 +292,19 @@ export default function MyProfileShow({ credit_balance, total_bookings, upcoming
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Member Since</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Member Since
+                                    </p>
                                     <p className="font-medium">
-                                        {new Date(user.created_at).toLocaleDateString()}
+                                        {new Date(
+                                            user.created_at,
+                                        ).toLocaleDateString()}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground">Account Type</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Account Type
+                                    </p>
                                     <Badge>{user.role}</Badge>
                                 </div>
                             </CardContent>

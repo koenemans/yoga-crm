@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import bookings from '@/routes/bookings';
 import lessons from '@/routes/lessons';
@@ -8,7 +13,6 @@ import waitlist from '@/routes/waitlist';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Calendar, Clock, MapPin, PlusCircle, Users } from 'lucide-react';
-import { useState } from 'react';
 
 interface Lesson {
     id: number;
@@ -31,11 +35,26 @@ interface Lesson {
     user_on_waitlist: boolean;
 }
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+interface PaginationMeta {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+}
+
 interface Props {
     lessons: {
         data: Lesson[];
-        links: any[];
-        meta: any;
+        links: PaginationLink[];
+        meta: PaginationMeta;
     };
     user_credit_balance: number;
 }
@@ -47,24 +66,34 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function LessonsIndex({ lessons: lessonsData, user_credit_balance }: Props) {
+export default function LessonsIndex({
+    lessons: lessonsData,
+    user_credit_balance,
+}: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const user = auth.user;
-    const [search, setSearch] = useState('');
 
     const handleBook = (lessonId: number) => {
-        router.post(bookings.store().url, { lesson_id: lessonId }, {
-            preserveScroll: true,
-        });
+        router.post(
+            bookings.store().url,
+            { lesson_id: lessonId },
+            {
+                preserveScroll: true,
+            },
+        );
     };
 
     const handleJoinWaitlist = (lessonId: number) => {
-        router.post(waitlist.store().url, { lesson_id: lessonId }, {
-            preserveScroll: true,
-        });
+        router.post(
+            waitlist.store().url,
+            { lesson_id: lessonId },
+            {
+                preserveScroll: true,
+            },
+        );
     };
 
-    const canBook = user.role === 'pupil' || user.role === 'admin';
+    const canBook = user.role === 'attendee' || user.role === 'admin';
     const canCreate = user.role === 'admin' || user.role === 'teacher';
 
     return (
@@ -89,15 +118,16 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                     )}
                 </div>
 
-                {/* Credit Balance for Pupils */}
-                {user.role === 'pupil' && (
+                {/* Credit Balance for Attendees */}
+                {user.role === 'attendee' && (
                     <Card className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
                         <CardHeader className="pb-3">
                             <CardTitle className="text-blue-900 dark:text-blue-100">
                                 Your Credit Balance: {user_credit_balance}
                             </CardTitle>
                             <CardDescription className="text-blue-700 dark:text-blue-300">
-                                {user_credit_balance < 3 && 'Running low on credits. '}
+                                {user_credit_balance < 3 &&
+                                    'Running low on credits. '}
                                 Each lesson requires credits to book.
                             </CardDescription>
                         </CardHeader>
@@ -111,19 +141,24 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                             <CardHeader>
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                        <CardTitle className="text-xl">{lesson.title}</CardTitle>
+                                        <CardTitle className="text-xl">
+                                            {lesson.title}
+                                        </CardTitle>
                                         <CardDescription className="mt-1">
                                             {lesson.teacher.name}
                                         </CardDescription>
                                     </div>
                                     <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                                        {lesson.credits_required} {lesson.credits_required === 1 ? 'credit' : 'credits'}
+                                        {lesson.credits_required}{' '}
+                                        {lesson.credits_required === 1
+                                            ? 'credit'
+                                            : 'credits'}
                                     </span>
                                 </div>
                             </CardHeader>
                             <CardContent className="flex flex-1 flex-col gap-4">
                                 {lesson.description && (
-                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                    <p className="line-clamp-2 text-sm text-muted-foreground">
                                         {lesson.description}
                                     </p>
                                 )}
@@ -131,22 +166,32 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                                 <div className="space-y-2 text-sm">
                                     <div className="flex items-center gap-2 text-muted-foreground">
                                         <Calendar className="h-4 w-4" />
-                                        <span>{new Date(lesson.start_datetime).toLocaleDateString('en-US', { 
-                                            weekday: 'short', 
-                                            month: 'short', 
-                                            day: 'numeric',
-                                            year: 'numeric'
-                                        })}</span>
+                                        <span>
+                                            {new Date(
+                                                lesson.start_datetime,
+                                            ).toLocaleDateString('en-US', {
+                                                weekday: 'short',
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            })}
+                                        </span>
                                     </div>
                                     <div className="flex items-center gap-2 text-muted-foreground">
                                         <Clock className="h-4 w-4" />
                                         <span>
-                                            {new Date(lesson.start_datetime).toLocaleTimeString('en-US', { 
-                                                hour: '2-digit', 
-                                                minute: '2-digit' 
-                                            })} - {new Date(lesson.end_datetime).toLocaleTimeString('en-US', { 
-                                                hour: '2-digit', 
-                                                minute: '2-digit' 
+                                            {new Date(
+                                                lesson.start_datetime,
+                                            ).toLocaleTimeString('en-US', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}{' '}
+                                            -{' '}
+                                            {new Date(
+                                                lesson.end_datetime,
+                                            ).toLocaleTimeString('en-US', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
                                             })}
                                         </span>
                                     </div>
@@ -157,47 +202,80 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                                     <div className="flex items-center gap-2 text-muted-foreground">
                                         <Users className="h-4 w-4" />
                                         <span>
-                                            {lesson.bookings_count} / {lesson.capacity} booked
-                                            {lesson.available_spots > 0 && ` (${lesson.available_spots} spots left)`}
+                                            {lesson.bookings_count} /{' '}
+                                            {lesson.capacity} booked
+                                            {lesson.available_spots > 0 &&
+                                                ` (${lesson.available_spots} spots left)`}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="mt-auto flex gap-2">
-                                    <Button asChild variant="outline" className="flex-1" size="sm">
-                                        <Link href={`/lessons/${lesson.id}`}>View Details</Link>
+                                    <Button
+                                        asChild
+                                        variant="outline"
+                                        className="flex-1"
+                                        size="sm"
+                                    >
+                                        <Link href={`/lessons/${lesson.id}`}>
+                                            View Details
+                                        </Link>
                                     </Button>
-                                    
-                                    {canBook && !lesson.user_booked && !lesson.is_full && (
-                                        <Button 
-                                            onClick={() => handleBook(lesson.id)}
-                                            disabled={user_credit_balance < lesson.credits_required}
-                                            className="flex-1"
-                                            size="sm"
-                                        >
-                                            Book Now
-                                        </Button>
-                                    )}
 
-                                    {canBook && !lesson.user_booked && lesson.is_full && lesson.waitlist_enabled && !lesson.user_on_waitlist && (
-                                        <Button 
-                                            onClick={() => handleJoinWaitlist(lesson.id)}
-                                            variant="secondary"
-                                            className="flex-1"
-                                            size="sm"
-                                        >
-                                            Join Waitlist
-                                        </Button>
-                                    )}
+                                    {canBook &&
+                                        !lesson.user_booked &&
+                                        !lesson.is_full && (
+                                            <Button
+                                                onClick={() =>
+                                                    handleBook(lesson.id)
+                                                }
+                                                disabled={
+                                                    user_credit_balance <
+                                                    lesson.credits_required
+                                                }
+                                                className="flex-1"
+                                                size="sm"
+                                            >
+                                                Book Now
+                                            </Button>
+                                        )}
+
+                                    {canBook &&
+                                        !lesson.user_booked &&
+                                        lesson.is_full &&
+                                        lesson.waitlist_enabled &&
+                                        !lesson.user_on_waitlist && (
+                                            <Button
+                                                onClick={() =>
+                                                    handleJoinWaitlist(
+                                                        lesson.id,
+                                                    )
+                                                }
+                                                variant="secondary"
+                                                className="flex-1"
+                                                size="sm"
+                                            >
+                                                Join Waitlist
+                                            </Button>
+                                        )}
 
                                     {lesson.user_booked && (
-                                        <Button disabled className="flex-1" size="sm">
+                                        <Button
+                                            disabled
+                                            className="flex-1"
+                                            size="sm"
+                                        >
                                             Booked ✓
                                         </Button>
                                     )}
 
                                     {lesson.user_on_waitlist && (
-                                        <Button disabled variant="secondary" className="flex-1" size="sm">
+                                        <Button
+                                            disabled
+                                            variant="secondary"
+                                            className="flex-1"
+                                            size="sm"
+                                        >
                                             On Waitlist
                                         </Button>
                                     )}
@@ -211,10 +289,13 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                 {lessonsData.data.length === 0 && (
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center py-12">
-                            <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-semibold mb-2">No Lessons Available</h3>
-                            <p className="text-muted-foreground text-center mb-4">
-                                There are no upcoming lessons scheduled at the moment.
+                            <Calendar className="mb-4 h-12 w-12 text-muted-foreground" />
+                            <h3 className="mb-2 text-lg font-semibold">
+                                No Lessons Available
+                            </h3>
+                            <p className="mb-4 text-center text-muted-foreground">
+                                There are no upcoming lessons scheduled at the
+                                moment.
                             </p>
                             {canCreate && (
                                 <Button asChild>
@@ -231,7 +312,7 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                 {/* Pagination */}
                 {lessonsData.links && lessonsData.links.length > 3 && (
                     <div className="flex justify-center gap-2">
-                        {lessonsData.links.map((link: any, index: number) => (
+                        {lessonsData.links.map((link, index) => (
                             <Button
                                 key={index}
                                 variant={link.active ? 'default' : 'outline'}
@@ -240,9 +321,18 @@ export default function LessonsIndex({ lessons: lessonsData, user_credit_balance
                                 asChild={!!link.url}
                             >
                                 {link.url ? (
-                                    <Link href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <Link
+                                        href={link.url}
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 ) : (
-                                    <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
                                 )}
                             </Button>
                         ))}

@@ -1,4 +1,3 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -10,28 +9,34 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
 import admin from '@/routes/admin';
 import bookings from '@/routes/bookings';
 import credits from '@/routes/credits';
-import { dashboard } from '@/routes';
 import lessons from '@/routes/lessons';
 import { type NavItem, type User } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Calendar, CreditCard, History, LayoutGrid, PlusCircle, Settings, Users } from 'lucide-react';
+import {
+    BarChart3,
+    Calendar,
+    CreditCard,
+    DollarSign,
+    History,
+    LayoutGrid,
+    PlusCircle,
+    Users,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const getNavItemsForRole = (role: string): NavItem[] => {
-    const baseItems: NavItem[] = [
-        {
-            title: 'Dashboard',
-            href: dashboard(),
-            icon: LayoutGrid,
-        },
-    ];
-
-    if (role === 'pupil') {
+    // Attendee navigation
+    if (role === 'attendee') {
         return [
-            ...baseItems,
+            {
+                title: 'Dashboard',
+                href: '/attendee/dashboard',
+                icon: LayoutGrid,
+            },
             {
                 title: 'Browse Lessons',
                 href: lessons.index(),
@@ -47,17 +52,17 @@ const getNavItemsForRole = (role: string): NavItem[] => {
                 href: credits.index(),
                 icon: CreditCard,
             },
-            {
-                title: 'My Profile',
-                href: '/my-profile',
-                icon: Users,
-            },
         ];
     }
 
+    // Teacher navigation
     if (role === 'teacher') {
         return [
-            ...baseItems,
+            {
+                title: 'Dashboard',
+                href: '/teacher/dashboard',
+                icon: LayoutGrid,
+            },
             {
                 title: 'My Lessons',
                 href: lessons.index(),
@@ -75,15 +80,20 @@ const getNavItemsForRole = (role: string): NavItem[] => {
             },
             {
                 title: 'All Lessons',
-                href: lessons.index().url + '?all=true',
+                href: lessons.all(),
                 icon: Calendar,
             },
         ];
     }
 
+    // Admin navigation - data management focused
     if (role === 'admin') {
         return [
-            ...baseItems,
+            {
+                title: 'Finance',
+                href: admin.finance.dashboard(),
+                icon: BarChart3,
+            },
             {
                 title: 'Users',
                 href: admin.users.index(),
@@ -91,48 +101,19 @@ const getNavItemsForRole = (role: string): NavItem[] => {
             },
             {
                 title: 'Lessons',
-                href: lessons.index(),
+                href: admin.lessons.index(),
                 icon: Calendar,
             },
             {
-                title: 'Credit Packages',
-                href: admin.creditPackages.index(),
-                icon: CreditCard,
-            },
-            {
-                title: 'Purchases',
-                href: admin.purchases.index(),
-                icon: CreditCard,
+                title: 'Credits',
+                href: admin.credits.index(),
+                icon: DollarSign,
             },
         ];
     }
 
-    if (role === 'accountant') {
-        return [
-            ...baseItems,
-            {
-                title: 'Purchases',
-                href: admin.purchases.index(),
-                icon: CreditCard,
-            },
-            {
-                title: 'Users',
-                href: admin.users.index(),
-                icon: Users,
-            },
-        ];
-    }
-
-    return baseItems;
+    return [];
 };
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Settings',
-        href: '/settings/profile',
-        icon: Settings,
-    },
-];
 
 export function AppSidebar() {
     const { auth } = usePage<{ auth: { user: User } }>().props;
@@ -158,7 +139,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

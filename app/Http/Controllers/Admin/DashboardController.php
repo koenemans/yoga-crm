@@ -24,7 +24,7 @@ class DashboardController extends Controller
         }
 
         $stats = [
-            'total_pupils' => User::where('role', 'pupil')->where('is_active', true)->count(),
+            'total_attendees' => User::where('role', 'attendee')->where('is_active', true)->count(),
             'total_teachers' => User::where('role', 'teacher')->where('is_active', true)->count(),
             'upcoming_lessons' => Lesson::where('status', 'active')
                 ->where('start_datetime', '>=', now())
@@ -68,10 +68,28 @@ class DashboardController extends Controller
                 ];
             });
 
-        return Inertia::render('admin/dashboard', [
+        $allLessons = Lesson::with(['teacher', 'bookings'])
+            ->orderBy('start_datetime', 'desc')
+            ->paginate(20)
+            ->through(function ($lesson) {
+                return [
+                    'id' => $lesson->id,
+                    'title' => $lesson->title,
+                    'teacher' => $lesson->teacher->full_name,
+                    'start_datetime' => $lesson->start_datetime,
+                    'location' => $lesson->location,
+                    'status' => $lesson->status,
+                    'bookings_count' => $lesson->bookings()->count(),
+                    'capacity' => $lesson->capacity,
+                    'available_spots' => $lesson->available_spots,
+                ];
+            });
+
+        return Inertia::render('admin/lessons/index', [
             'stats' => $stats,
             'upcoming_lessons' => $upcomingLessons,
             'recent_bookings' => $recentBookings,
+            'all_lessons' => $allLessons,
         ]);
     }
 }

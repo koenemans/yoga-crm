@@ -23,7 +23,6 @@ class BookingPolicy
     public function view(User $user, Booking $booking): bool
     {
         return $user->isAdmin() 
-            || $user->isAccountant()
             || $user->id === $booking->user_id 
             || ($user->isTeacher() && $booking->lesson->teacher_id === $user->id);
     }

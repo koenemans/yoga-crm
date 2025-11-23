@@ -1,8 +1,20 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type User } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
@@ -34,7 +46,14 @@ export default function MyProfileEdit() {
         preferred_language: user.preferred_language,
     });
 
-    const { data: passwordData, setData: setPasswordData, put: putPassword, processing: processingPassword, errors: passwordErrors, reset: resetPassword } = useForm({
+    const {
+        data: passwordData,
+        setData: setPasswordData,
+        put: putPassword,
+        processing: processingPassword,
+        errors: passwordErrors,
+        reset: resetPassword,
+    } = useForm({
         current_password: '',
         password: '',
         password_confirmation: '',
@@ -64,7 +83,9 @@ export default function MyProfileEdit() {
                     </Button>
                     <div>
                         <h1 className="text-3xl font-bold">Edit Profile</h1>
-                        <p className="text-muted-foreground">Update your personal information</p>
+                        <p className="text-muted-foreground">
+                            Update your personal information
+                        </p>
                     </div>
                 </div>
 
@@ -74,29 +95,53 @@ export default function MyProfileEdit() {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Personal Information</CardTitle>
-                                <CardDescription>Update your personal details</CardDescription>
+                                <CardDescription>
+                                    Update your personal details
+                                </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="first_name">First Name *</Label>
+                                        <Label htmlFor="first_name">
+                                            First Name *
+                                        </Label>
                                         <Input
                                             id="first_name"
                                             value={data.first_name}
-                                            onChange={(e) => setData('first_name', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'first_name',
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         />
-                                        {errors.first_name && <p className="text-sm text-destructive">{errors.first_name}</p>}
+                                        {errors.first_name && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.first_name}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="last_name">Last Name *</Label>
+                                        <Label htmlFor="last_name">
+                                            Last Name *
+                                        </Label>
                                         <Input
                                             id="last_name"
                                             value={data.last_name}
-                                            onChange={(e) => setData('last_name', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'last_name',
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         />
-                                        {errors.last_name && <p className="text-sm text-destructive">{errors.last_name}</p>}
+                                        {errors.last_name && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.last_name}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -106,10 +151,16 @@ export default function MyProfileEdit() {
                                         id="email"
                                         type="email"
                                         value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('email', e.target.value)
+                                        }
                                         required
                                     />
-                                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                                    {errors.email && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.email}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2">
@@ -118,19 +169,39 @@ export default function MyProfileEdit() {
                                         <Input
                                             id="phone"
                                             value={data.phone}
-                                            onChange={(e) => setData('phone', e.target.value)}
+                                            onChange={(e) =>
+                                                setData('phone', e.target.value)
+                                            }
                                         />
-                                        {errors.phone && <p className="text-sm text-destructive">{errors.phone}</p>}
+                                        {errors.phone && (
+                                            <p className="text-sm text-destructive">
+                                                {errors.phone}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="preferred_language">Language *</Label>
-                                        <Select value={data.preferred_language} onValueChange={(value) => setData('preferred_language', value)}>
+                                        <Label htmlFor="preferred_language">
+                                            Language *
+                                        </Label>
+                                        <Select
+                                            value={data.preferred_language}
+                                            onValueChange={(value) =>
+                                                setData(
+                                                    'preferred_language',
+                                                    value,
+                                                )
+                                            }
+                                        >
                                             <SelectTrigger>
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="nl">Dutch</SelectItem>
-                                                <SelectItem value="en">English</SelectItem>
+                                                <SelectItem value="nl">
+                                                    Dutch
+                                                </SelectItem>
+                                                <SelectItem value="en">
+                                                    English
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -141,35 +212,61 @@ export default function MyProfileEdit() {
                                     <Input
                                         id="address"
                                         value={data.address}
-                                        onChange={(e) => setData('address', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('address', e.target.value)
+                                        }
                                     />
-                                    {errors.address && <p className="text-sm text-destructive">{errors.address}</p>}
+                                    {errors.address && (
+                                        <p className="text-sm text-destructive">
+                                            {errors.address}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2">
                                     <div className="space-y-2">
-                                        <Label htmlFor="emergency_contact">Emergency Contact</Label>
+                                        <Label htmlFor="emergency_contact">
+                                            Emergency Contact
+                                        </Label>
                                         <Input
                                             id="emergency_contact"
                                             value={data.emergency_contact}
-                                            onChange={(e) => setData('emergency_contact', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'emergency_contact',
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="emergency_contact_phone">Emergency Phone</Label>
+                                        <Label htmlFor="emergency_contact_phone">
+                                            Emergency Phone
+                                        </Label>
                                         <Input
                                             id="emergency_contact_phone"
                                             value={data.emergency_contact_phone}
-                                            onChange={(e) => setData('emergency_contact_phone', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'emergency_contact_phone',
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4 pt-4">
                                     <Button type="submit" disabled={processing}>
-                                        {processing ? 'Saving...' : 'Save Changes'}
+                                        {processing
+                                            ? 'Saving...'
+                                            : 'Save Changes'}
                                     </Button>
-                                    <Button asChild variant="outline" type="button">
+                                    <Button
+                                        asChild
+                                        variant="outline"
+                                        type="button"
+                                    >
                                         <Link href="/my-profile">Cancel</Link>
                                     </Button>
                                 </div>
@@ -182,47 +279,81 @@ export default function MyProfileEdit() {
                         <Card>
                             <CardHeader>
                                 <CardTitle>Change Password</CardTitle>
-                                <CardDescription>Update your account password</CardDescription>
+                                <CardDescription>
+                                    Update your account password
+                                </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="current_password">Current Password *</Label>
+                                    <Label htmlFor="current_password">
+                                        Current Password *
+                                    </Label>
                                     <Input
                                         id="current_password"
                                         type="password"
                                         value={passwordData.current_password}
-                                        onChange={(e) => setPasswordData('current_password', e.target.value)}
+                                        onChange={(e) =>
+                                            setPasswordData(
+                                                'current_password',
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                     {passwordErrors.current_password && (
-                                        <p className="text-sm text-destructive">{passwordErrors.current_password}</p>
+                                        <p className="text-sm text-destructive">
+                                            {passwordErrors.current_password}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="password">New Password *</Label>
+                                    <Label htmlFor="password">
+                                        New Password *
+                                    </Label>
                                     <Input
                                         id="password"
                                         type="password"
                                         value={passwordData.password}
-                                        onChange={(e) => setPasswordData('password', e.target.value)}
+                                        onChange={(e) =>
+                                            setPasswordData(
+                                                'password',
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                     {passwordErrors.password && (
-                                        <p className="text-sm text-destructive">{passwordErrors.password}</p>
+                                        <p className="text-sm text-destructive">
+                                            {passwordErrors.password}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="password_confirmation">Confirm New Password *</Label>
+                                    <Label htmlFor="password_confirmation">
+                                        Confirm New Password *
+                                    </Label>
                                     <Input
                                         id="password_confirmation"
                                         type="password"
-                                        value={passwordData.password_confirmation}
-                                        onChange={(e) => setPasswordData('password_confirmation', e.target.value)}
+                                        value={
+                                            passwordData.password_confirmation
+                                        }
+                                        onChange={(e) =>
+                                            setPasswordData(
+                                                'password_confirmation',
+                                                e.target.value,
+                                            )
+                                        }
                                     />
                                 </div>
 
-                                <Button type="submit" disabled={processingPassword}>
-                                    {processingPassword ? 'Changing...' : 'Change Password'}
+                                <Button
+                                    type="submit"
+                                    disabled={processingPassword}
+                                >
+                                    {processingPassword
+                                        ? 'Changing...'
+                                        : 'Change Password'}
                                 </Button>
                             </CardContent>
                         </Card>

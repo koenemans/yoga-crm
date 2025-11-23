@@ -24,6 +24,10 @@ class CreditPurchase extends Model
         'payment_method',
         'paid_at',
         'confirmed_by',
+        'mollie_payment_id',
+        'mollie_payment_status',
+        'mollie_payment_data',
+        'mollie_webhook_received_at',
     ];
 
     protected function casts(): array
@@ -31,6 +35,8 @@ class CreditPurchase extends Model
         return [
             'price' => 'decimal:2',
             'paid_at' => 'datetime',
+            'mollie_payment_data' => 'array',
+            'mollie_webhook_received_at' => 'datetime',
         ];
     }
 
@@ -91,5 +97,21 @@ class CreditPurchase extends Model
     public function isPending(): bool
     {
         return $this->status === 'pending';
+    }
+
+    /**
+     * Check if purchase has a Mollie payment.
+     */
+    public function hasMolliePayment(): bool
+    {
+        return !empty($this->mollie_payment_id);
+    }
+
+    /**
+     * Get the Mollie payment URL if available.
+     */
+    public function getMolliePaymentUrl(): ?string
+    {
+        return $this->mollie_payment_data['_links']['checkout']['href'] ?? null;
     }
 }

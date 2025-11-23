@@ -14,6 +14,8 @@ use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardControll
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\MollieWebhookController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaitlistController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,9 @@ Route::get('/', function () {
         'canRegister' => Features::enabled(Features::registration()),
     ]);
 })->name('home');
+
+// Mollie webhook (no auth required)
+Route::post('mollie/webhook', MollieWebhookController::class)->name('mollie.webhook');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -79,6 +84,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('credits', [CreditController::class, 'index'])->name('credits.index');
     Route::post('credits/purchase', [CreditController::class, 'purchase'])->name('credits.purchase');
     Route::get('credits/purchase/{purchase}', [CreditController::class, 'showPurchase'])->name('credits.purchase.show');
+
+    // Payment routes
+    Route::get('payment/{package}', [PaymentController::class, 'create'])->name('payment.create');
+    Route::post('payment/{package}', [PaymentController::class, 'store'])->name('payment.store');
+    Route::get('payment/{purchase}/return', [PaymentController::class, 'return'])->name('payment.return');
+    Route::get('payment/{purchase}/status', [PaymentController::class, 'show'])->name('payment.show');
 
     // Attendee dashboard
     Route::get('attendee/dashboard', [AttendeeDashboardController::class, 'index'])->name('attendee.dashboard');

@@ -37,9 +37,11 @@ A complete management system designed specifically for yoga schools and studios.
 
 ### Flexible Credit System
 - Pre-purchase credits in packages
+- **Secure online payments via Mollie** (iDEAL, credit card, PayPal, etc.)
 - Credits have expiry dates to encourage regular attendance
 - Manual credit adjustments by admin when needed
 - Complete transaction history for transparency
+- Automatic credit allocation after successful payment
 
 ### Financial Management
 - Track all purchases and payments
@@ -134,13 +136,22 @@ php artisan key:generate
 
 3. Set up database (edit .env file with your database credentials)
 
-4. Run migrations and seed test data:
+4. Configure Mollie payment integration:
+   - Sign up for a Mollie account at https://www.mollie.com
+   - Get your API key from the Mollie dashboard
+   - Add to your `.env` file:
+   ```
+   MOLLIE_KEY=test_xxxxxxxxxxxxxxxxxxxxxxxxxx
+   ```
+   - For production, use your live API key instead of test key
+
+5. Run migrations and seed test data:
 ```bash
 php artisan migrate
 php artisan db:seed --class=YogaCrmSeeder
 ```
 
-5. Start development server:
+6. Start development server:
 ```bash
 composer run dev
 ```
@@ -162,6 +173,60 @@ Visit http://localhost:8000
 - **Styling:** TailwindCSS with shadcn/ui components
 - **Database:** MySQL, PostgreSQL, or SQLite
 - **Email:** Configurable SMTP
+- **Payments:** Mollie API (iDEAL, credit cards, and more)
+
+---
+
+## Payment Integration
+
+### Mollie Setup
+
+This system uses **Mollie** as the payment provider, which is perfect for European businesses and supports:
+- **iDEAL** (most popular in Netherlands)
+- Credit cards (Visa, Mastercard, American Express)
+- PayPal
+- Bancontact
+- And many more payment methods
+
+### How It Works
+
+1. **Student selects a credit package** on the Credits page
+2. **Clicks "Buy Now"** to proceed to payment
+3. **Reviews order** on the payment page
+4. **Redirected to Mollie** for secure payment processing
+5. **Completes payment** using their preferred method (iDEAL, credit card, etc.)
+6. **Webhook notification** automatically updates the purchase status
+7. **Credits are added** to the student's account immediately
+8. **Confirmation email** is sent (if configured)
+
+### Testing Payments
+
+Mollie provides test mode for development:
+- Use test API keys (starting with `test_`)
+- Test payments don't charge real money
+- Use Mollie's test payment methods to simulate successful/failed payments
+- See https://docs.mollie.com/overview/testing for test card numbers
+
+### Production Setup
+
+1. **Verify your Mollie account** (provide business details)
+2. **Switch to live API key** in your `.env` file
+3. **Configure webhook URL** in Mollie dashboard (if not auto-configured):
+   ```
+   https://yourdomain.com/mollie/webhook
+   ```
+4. **Test with real payment** (small amount first)
+5. **Monitor payments** in Mollie dashboard
+
+### Webhook Configuration
+
+The webhook endpoint (`/mollie/webhook`) handles automatic payment status updates:
+- No authentication required (Mollie verifies via payment ID)
+- Processes payment confirmations in the background
+- Updates purchase status and adds credits automatically
+- Logs all webhook events for debugging
+
+**Important:** Make sure your webhook URL is publicly accessible (not localhost) in production.
 
 ---
 
@@ -172,7 +237,9 @@ Visit http://localhost:8000
 - Protection against common web vulnerabilities
 - Optional two-factor authentication
 - Email verification for new accounts
-- Secure payment confirmation workflow
+- **PCI-compliant payment processing** (via Mollie - no card data stored locally)
+- Secure webhook verification for payment updates
+- HTTPS required for production payment processing
 
 ## Support & Customization
 

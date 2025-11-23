@@ -124,7 +124,11 @@ export default function CreditPackagesIndex({ packages }: Props) {
                                                         size="sm"
                                                     >
                                                         <Link
-                                                            href={admin.credits.edit(pkg.id).url}
+                                                            href={
+                                                                admin.credits.edit(
+                                                                    pkg.id,
+                                                                ).url
+                                                            }
                                                         >
                                                             Edit
                                                         </Link>

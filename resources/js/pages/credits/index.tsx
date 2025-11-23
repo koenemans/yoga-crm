@@ -65,7 +65,7 @@ export default function CreditsIndex({
     expiring_credits,
 }: Props) {
     const handlePurchase = (packageId: number) => {
-        router.post(credits.purchase().url, { credit_package_id: packageId });
+        router.visit(`/payment/${packageId}`);
     };
 
     return (
@@ -172,7 +172,7 @@ export default function CreditsIndex({
                                         onClick={() => handlePurchase(pkg.id)}
                                         className="mt-auto"
                                     >
-                                        Purchase
+                                        Buy Now
                                     </Button>
                                 </CardContent>
                             </Card>
